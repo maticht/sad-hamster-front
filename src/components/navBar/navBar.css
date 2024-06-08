@@ -1,0 +1,36 @@
+.navBarBlock {
+    position: fixed;
+    bottom: 18px;
+    width: calc(100% - 30px);
+    margin: 0 auto;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    backdrop-filter: blur(2px);
+    height: 45px;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navBarLink {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1.5px solid #6b6b6b;
+}
+
+.navBarLink:last-child {
+    border-right: 0;
+}
+
+.navBarLink img {
+    height: 31px;
+}
+
+.navBarLink.active {
+    background-color: rgba(105, 105, 105, 0.5);
+}

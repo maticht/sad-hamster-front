@@ -1,0 +1,51 @@
+.modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modalContainer {
+    width: calc(270px);
+    margin: 0 15px 100px;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    backdrop-filter: blur(2px);
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 15px;
+}
+
+.modalContent {
+    text-align: center;
+}
+.modalContent p{
+    margin: 10px 0 20px;
+}
+.modalContent h2{
+    margin: 6px 0 15px;
+}
+.modalContent img {
+    width: 160px;
+    max-width: 100%;
+    height: auto;
+}
+
+.modalContent button {
+    margin-top: 7px;
+    padding: 7px 30px;
+    font-family: "Pixelify Sans", sans-serif;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    color: black;
+}

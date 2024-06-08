@@ -1,0 +1,183 @@
+.share-screen {
+    height: 100vh;
+    text-align: center;
+    background-image: url('../../img/background/InviteFriends.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.share-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto 0;
+    position: relative;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+}
+.share-block{
+    display: flex;
+    width: calc(100% - 30px);
+    margin: 15px auto -15px;
+    flex-direction: column;
+}
+.headerShareBlock{
+    height: 50px;
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    align-items: center;
+    width: calc(100% - 26px);
+    margin-top: 15px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+.share-scroll-block{
+    z-index: 1;
+    padding-top: 64px;
+    padding-bottom: 5px;
+    width: 100%;
+}
+
+.share-scroll-block::-webkit-scrollbar {
+    display: none;
+}
+
+.share-info-block{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: calc(100% - 60px);
+    margin: 15px auto 0;
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 8px 15px;
+}
+.share-info-block h2{
+    font-size: 17px;
+    margin: 7px 0 3px;
+}
+.share-info-block p{
+    font-size: 14px;
+    margin: 2px 0;
+}
+.referralUsers{
+    width: calc(100% - 26px);
+    margin: 15px auto 0;
+}
+.referral-users-block{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: calc(100% - 5px);
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 8px 0 -5px;
+    margin-bottom: 75px;
+    height: 100%;
+    max-height: calc(100vh - 325px);
+    overflow-y: auto;
+}
+
+.referral-users-block::-webkit-scrollbar {
+    display: none;
+}
+.referral-users-block h2{
+    font-size: 17px;
+    margin: 7px 0 3px;
+}
+.referral-users-block p{
+    font-size: 14px;
+    margin: 2px 0;
+}
+.referral-users-replenishment{
+    margin: 15px 0 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.referral-users-text{
+    width: calc(100% - 30px);
+    margin: 0 0 0 15px;
+}
+.referral-user-score{
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(204, 204, 204, 0.5);
+    font-family: "Pixelify Sans", serif;
+    display: flex;
+    color: black;
+    justify-content: space-between;
+    padding: 4px 10px;
+    align-items: center;
+    cursor: pointer;
+}
+.referral-user-score b{
+    font-size: 15px;
+    margin-left: 10px;
+}
+.referral-user-score img{
+    height: 19px;
+    width: 19px;
+    margin: 0 0 0 5px;
+}
+.referral-user-score-num{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+.share-info-block a{
+    text-decoration: none;
+    color: #000;
+    font-family: "Pixelify Sans", serif;
+    align-self: self-end;
+    font-size: 14px;
+    margin: 0 0 2px;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(188, 188, 188, 0.5);
+    padding: 8px 15px;
+}
+
+@media screen and (max-width: 320px){
+    .referral-users-replenishment{
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+    .referral-user-score{
+        width: 100%;
+        margin-top: 10px;
+    }
+    .referral-users-block{
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        width: calc(100% - 5px);
+        align-items: flex-start;
+        border: 2.5px solid #111111;
+        backdrop-filter: blur(2px);
+        border-radius: 2px;
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 8px 0 -5px;
+        margin-bottom: 75px;
+        height: 100%;
+        max-height: calc(100vh - 360px);
+        overflow-y: auto;
+    }
+}

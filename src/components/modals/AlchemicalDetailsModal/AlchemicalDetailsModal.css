@@ -1,0 +1,202 @@
+.newEggModalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.dailyRewardContainer {
+    width: calc(320px);
+    margin: 0 15px 0px;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    backdrop-filter: blur(2px);
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 15px 0;
+}
+
+.dailyRewardContent {
+    text-align: left;
+}
+.newEggCongratulationsText{
+    margin: 0 0 10px 0;
+}
+.newEggCongratulationsRarity{
+    margin: 0;
+}
+.newEggModalContentNote{
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+.alchemicalChanceTitle{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 15px 0 15px;
+}
+.alchemicalChanceText{
+    font-size: 14px;
+    margin: 5px 15px 10px 15px;
+}
+.alchemicalItem{
+    width: calc(100% - 30px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    padding: 0 15px 5px;
+    border-bottom: 1px solid #6e6e6e;
+}
+.alchemicalItem:last-child{
+    border-bottom: 0 solid #111111;
+}
+.alchemicalChance p{
+    margin: 3px 0 0 0;
+}
+.alchemicalRarity{
+    text-align: right;
+}
+.alchemicalRarity p{
+    margin: 3px 0 0 0;
+}
+.rewardItemText{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.rewardItemText p{
+    margin: 0;
+    font-size: 14px;
+}
+.dailyRewardContentButton {
+    text-align: center;
+    display: flex;
+    align-self: center;
+    margin: 15px auto 0;
+    padding: 7px 35px;
+    font-family: "Pixelify Sans", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: black;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+.rewardItemButton{
+    text-align: center;
+    display: flex;
+    align-self: center;
+    margin: 0 0 0;
+    padding: 5px 15px;
+    font-family: "Pixelify Sans", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: black;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+
+
+.newEggEggBlock{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100% - 35px);
+    margin: 15px 0;
+    padding: 7px 15px;
+    font-family: "Pixelify Sans", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+.newEggEggBlock p{
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+}
+.newEggEggBlock img{
+    width: 55px;
+}
+.newEggEggRarity{
+    margin: 10px 0 0;
+}
+.newEggEggRarity b{
+    font-weight: 900;
+}
+.your-top-place-text{
+    width: calc(100% - 30px);
+    margin: 5px 15px 0;
+}
+.your-top-place-text img{
+    width: 15px;
+    margin-left: 5px;
+}
+.leagueName{
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 900;
+}
+@keyframes gradientAnimation {
+    0% {
+        background-position: 80% 50%;
+    }
+    100% {
+        background-position: -110% 50%;
+    }
+}
+
+
+.diamond {
+    background: linear-gradient(to right, #8ac0c9, #787ebb, #787ebb, #8ac0c9);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientAnimation 2s linear infinite;
+}
+.golden {
+    background: linear-gradient(to right, #d9ba0f, #a68819, #a68819, #d9ba0f);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientAnimation 2s linear infinite;
+}
+.silver {
+    background: linear-gradient(to right, #969696, #626060, #626060, #969696);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientAnimation 2s linear infinite;
+}
+.bronze {
+    background: linear-gradient(to right, #A96C3BFF, #644816, #644816, #A96C3BFF);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientAnimation 2s linear infinite;}
+
+.stone {
+    background: linear-gradient(to right, #6e6e6e, #343030FF, #343030FF, #6E6E6EFF);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientAnimation 2s linear infinite;
+}
+
+

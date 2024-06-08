@@ -1,0 +1,350 @@
+.wallet-screen {
+    text-align: center;
+    background-image: url('../../img/background/walletbg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+}
+.wallet-block{
+    display: flex;
+    width: calc(100% - 26px);
+    margin: 0 auto -15px;
+    flex-direction: column;
+    z-index: 1;
+    padding-top: 15px;
+    padding-bottom: 95px;
+    height: calc(100vh - 100px);
+
+    overflow-y: auto;
+}
+.wallet-block::-webkit-scrollbar {
+    display: none;
+}
+.wallet-block:last-child{
+    display: flex;
+    width: calc(100% - 30px);
+    margin: 0px auto 0;
+    flex-direction: column;
+}
+.profile-info-score{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+.profile-info-score p{
+    font-size: 14px;
+}
+.profile-info-score b{
+    font-size: 15px;
+    margin: 0 3px;
+}
+.profile-info-score img{
+    width: 18px;
+    margin: 0 3px;
+}
+
+.wallet-info-values{
+    padding: 0 13px 3px;
+}
+.wallet-balance-block{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: calc(100% - 31px);
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    padding: 10px 13px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 15px;
+}
+.wallet-balance-block h2{
+    font-size: 17px;
+    margin: 0 0 0;
+}
+.wallet-balance-block p{
+    font-size: 14px;
+    margin: 2px 0;
+}
+.wallet-info-block{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: calc(100% - 5px);
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.wallet-info-block::-webkit-scrollbar {
+    display: none;
+}
+.wallet-info-block h2{
+    font-size: 17px;
+    margin: 7px 0 0;
+}
+.wallet-info-block p{
+    font-size: 14px;
+    margin: 2px 0;
+}
+.wallet-transaction-list{
+    width: 100%;
+    height: 100%;
+    margin-top: 5px;
+}
+.wallet-token-list{
+    width: 100%;
+    margin-top: 5px;
+}
+.wallet-token-block{
+    width: calc(100% - 26px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0 0 5px;
+    padding: 5px 13px 11px 13px;
+    border-bottom: 1px solid #6e6e6e;
+}
+.wallet-token-block:last-child{
+    border-bottom: 0 solid #111111;
+    margin: 0 0 0;
+}
+
+.wallet-transaction-block{
+    width: calc(100% - 10px);
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 5px;
+    padding: 0 10px 10px 0;
+    border-bottom: 1px solid #6e6e6e;
+}
+.wallet-transaction-block:last-child{
+    border-bottom: 0 solid #111111;
+}
+.transaction-header{
+    width: 100%;
+    display: flex;
+    margin: 8px 0 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.token-header{
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.token-header p{
+    font-size: 14px;
+    margin: 2px 0 0;
+}
+.token-header h3{
+    font-size: 16px;
+    margin: 0;
+}
+.token-header-value{
+    text-align: right;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.token-header-value p{
+    font-size: 14px;
+    margin: 2px 0 0;
+}
+.wallet-transactions-block{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: calc(100% - 5px);
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px 0 0;
+    margin-top: 15px;
+
+}
+
+.wallet-transactions-block h2{
+    font-size: 17px;
+    margin: 7px 0 0 13px;
+}
+.wallet-transactions-block p{
+    font-size: 14px;
+    margin: 2px 0 0 13px;
+}
+.wallet-transactions-block h3{
+    font-size: 16px;
+    margin: 0 0 0 13px;
+}
+.wallet-connect-button{
+    font-family: "Pixelify Sans", serif;
+    align-self: self-end;
+    font-size: 14px;
+    margin: 10px auto 2px;
+    color: black;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(188, 188, 188, 0.5);
+    padding: 8px 15px;
+    cursor: pointer;
+}
+.top-users-list{
+    margin-top: 5px;
+}
+.top-user-block{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+.top-user-info{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.top-user-title{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.top-user-score{
+    text-align: right;
+}
+.top-user-block img{
+    margin: 0 10px 0 0;
+    width: 25px;
+    height: 33px;
+}
+.product-item{
+    display: flex;
+    width: calc(100% - 30px);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 3px solid #111111;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 8px 15px;
+    margin-bottom: 15px;
+}
+.product-item div{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.product-item img{
+    height: 35px;
+    margin-right: 15px;
+}
+.wallet-btn-block{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.connection-block{
+    margin-top: 3px;
+    width: 100%;
+}
+.input-connection-block{
+    width: 100%;
+    margin: 5px 0 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.connection-input{
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding:7px 5px;
+    font-weight: 500;
+    width: calc(100% - 15px);
+    font-size: 16px;
+    margin-right: 13px;
+    color: #111111;
+    outline: none;
+    font-family: "Pixelify Sans", serif;
+
+}
+.input-connect-button{
+    font-family: "Pixelify Sans", serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding:7px 7px;
+    font-weight: 500;
+    font-size: 15px;
+    color: #111111;
+}
+.wallet-disconnect-button{
+    font-family: "Pixelify Sans", serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    padding:7px 5px;
+    font-weight: 500;
+    width: calc(50% - 7.5px);
+    font-size: 15px;
+    color: #111111;
+}
+.wallet-disconnect-button:last-child{
+    font-weight: bold;
+    text-align: center;
+    width: calc(50% - 7.5px);
+    text-decoration: none;
+    padding:7px 0;
+    color: rgba(75, 187, 73, 0.85);
+}
+.wallet-connect-text{
+    width: calc(100% - 140px);
+}
+.wallet-connect-link{
+    text-align: center;
+    font-family: "Pixelify Sans", serif;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    border: 2.5px solid #111111;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 3px;
+    text-decoration: none;
+    padding:7px 15px;
+    color: rgba(75, 187, 73, 0.85);
+}

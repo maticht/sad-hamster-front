@@ -1,0 +1,274 @@
+.topUsersScreen-screen {
+    text-align: center;
+    background-image: url('../../img/background/topUsers.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.top-users-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto 0;
+    /*position: relative;*/
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+}
+.products-block{
+    display: flex;
+    width: calc(100% - 26px);
+    margin: 0 auto 10px;
+    flex-direction: column;
+}
+.top-users-scroll-block{
+    z-index: 1;
+    padding-top: 122px;
+    padding-bottom: 60px;
+    height: calc(100vh - 135px);
+    overflow-y: auto;
+    width: 100%;
+}
+
+.top-users-scroll-block::-webkit-scrollbar {
+    display: none;
+}
+.top-users-info-block{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: calc(100% - 35px);
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    margin: 15px auto;
+    background-color: rgba(255, 255, 255, 0.5);
+    /*position: absolute;*/
+    /*left: 50%;*/
+    /*transform: translateX(-50%);*/
+    /*z-index: 2;*/
+    padding: 8px 15px;
+}
+.top-users-btn-block{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 10px 0 5px;
+}
+.top-users-btn-block button{
+    display: flex;
+    font-family: "Pixelify Sans", serif;
+    font-size: 14px;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px 15px;
+    color: #111111;
+}
+.top-users-info-block h2{
+    font-size: 17px;
+    margin: 7px 0;
+}
+.top-users-info-block p{
+    font-size: 14px;
+    margin: 2px 0;
+}
+.product-item{
+    display: flex;
+    width: calc(100% - 30px);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 8px 15px;
+    margin-bottom: 15px;
+}
+.product-item div{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.product-item img{
+    height: 35px;
+    margin-right: 15px;
+}
+.profile-info-block{
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: calc(100% - 35px);
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px 15px 8px;
+}
+.profile-info-block h2{
+    font-size: 17px;
+    margin: 7px 0;
+}
+.profile-info-block p{
+    font-size: 14px;
+    margin: 2px 0;
+}
+.profile-info-block button{
+    font-family: "Pixelify Sans", serif;
+    align-self: self-end;
+    font-size: 14px;
+    margin: 0 0 2px;
+    color: black;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(188, 188, 188, 0.5);
+    padding: 8px 15px;
+}
+.top-users-block{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: calc(100% - 5px);
+    align-items: flex-start;
+    border: 2.5px solid #111111;
+    backdrop-filter: blur(2px);
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 8px 0 -5px;
+    margin-bottom: 75px;
+    z-index: 1;
+    height: calc(100vh - 265px);
+    overflow-y: auto;
+}
+
+.top-users-block::-webkit-scrollbar {
+    display: none;
+}
+.top-users-block h2{
+    font-size: 17px;
+    margin: 7px 0 3px;
+}
+.top-users-block p{
+    font-size: 14px;
+    margin: 2px 0;
+}
+.top-users-text{
+    margin: 0 0 0 15px;
+}
+.top-users-list{
+    width: calc(100% - 30px);
+    margin-top: 5px;
+}
+.top-user-block{
+    width: calc(100%);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 5px 0;
+    padding: 0 15px;
+    border-bottom: 1px solid #6e6e6e;
+}
+.top-user-block:last-child{
+    border-bottom: 0 solid #111111;
+}
+.top-user-info{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.after-fourth-user-info{
+}
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+.image-container img{
+    width: 16px;
+    height: 28px;
+    margin-left: 4px;
+    margin-top: 3px;
+}
+.after-fourth-to-ten-user-place {
+    position: absolute;
+    top: 23px;
+    left: 12px;
+    transform: translate(-50%, -100%);
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    color: #2d476b;
+}
+
+.after-fourth-user-place{
+    margin-right: 10px;
+    font-size: 15px;
+}
+.top-user-title{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.top-user-score{
+    text-align: right;
+}
+.top-user-block-img{
+    margin: 0 10px 0 0;
+    width: 25px;
+    height: 33px;
+}
+.product-item{
+    display: flex;
+    width: calc(100% - 30px);
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border: 3px solid #111111;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 8px 15px;
+    margin-bottom: 15px;
+}
+.product-item div{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+.product-item img{
+    height: 35px;
+    margin-right: 15px;
+}
+
+@media screen and (max-width: 260px){
+    .top-users-block{
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        width: calc(100% - 5px);
+        align-items: flex-start;
+        border: 2.5px solid #111111;
+        backdrop-filter: blur(2px);
+        border-radius: 2px;
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 8px 0 -5px;
+        margin-bottom: 75px;
+        z-index: 1;
+        height: calc(100vh - 300px);
+        overflow-y: auto;
+    }
+}

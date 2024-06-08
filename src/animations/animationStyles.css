@@ -1,0 +1,29 @@
+.click-effect {
+    position: fixed;
+    font-size: 36px;
+    color: #ffffff;
+    margin-bottom: 10px;
+    z-index: 12;
+    text-shadow: -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px  2px 0 #000,
+    2px  2px 0 #000;
+    animation: fadeInAndUp 0.5s ease forwards;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Стандартное свойство */
+}
+
+@keyframes fadeInAndUp {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    90% {
+    }
+    100% {
+        transform: translateY(-38px);
+        opacity: 0;
+    }
+}
