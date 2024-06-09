@@ -98,16 +98,16 @@ export const TopUsersScreen = () => {
         <div className="topUsersScreen-screen">
             <div className="top-users-container">
                 <div className={'products-block'}>
-                    <div className='top-users-info-block'>
-                        <h2>Competition conditions</h2>
-                        <p>Be among the top 100 users of the current week and receive a prize</p>
-                        <div className='top-users-btn-block'>
-                            <button onClick={handleTopRewardModalToggle}>Competition details</button>
-                        </div>
-                    </div>
-                    {topRewardModal && <TopUsersModal onClose={() => {
-                        handleTopRewardModalToggle()
-                    }}/>}
+                    {/*<div className='top-users-info-block'>*/}
+                    {/*    <h2>Competition conditions</h2>*/}
+                    {/*    <p>Be among the top 100 users of the current week and receive a prize</p>*/}
+                    {/*    <div className='top-users-btn-block'>*/}
+                    {/*        <button onClick={handleTopRewardModalToggle}>Competition details</button>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+                    {/*{topRewardModal && <TopUsersModal onClose={() => {*/}
+                    {/*    handleTopRewardModalToggle()*/}
+                    {/*}}/>}*/}
 
                     {/*<div className={'top-users-scroll-block'}>*/}
 
@@ -116,18 +116,18 @@ export const TopUsersScreen = () => {
                             <h2>Top users</h2>
                             <p>Current number of users: <b>{allUsers.length}</b></p>
                             <p>Place in the top: <b>{userPlaceInTop}</b></p>
-                            {userLeague ? (
-                                <p className='profile-info-league'>League: <b
-                                    className={`leagueName ${getClassName(userLeague)}`}>
-                                    {userLeague}
-                                </b>
-                                </p>
-                            ) : (
-                                <p className='profile-info-league'>League: <b>
-                                    Uncertain League
-                                </b>
-                                </p>
-                            )}
+                            {/*{userLeague ? (*/}
+                            {/*    <p className='profile-info-league'>League: <b*/}
+                            {/*        className={`leagueName ${getClassName(userLeague)}`}>*/}
+                            {/*        {userLeague}*/}
+                            {/*    </b>*/}
+                            {/*    </p>*/}
+                            {/*) : (*/}
+                            {/*    <p className='profile-info-league'>League: <b>*/}
+                            {/*        Uncertain League*/}
+                            {/*    </b>*/}
+                            {/*    </p>*/}
+                            {/*)}*/}
 
                         </div>
                         {allUsers && (
@@ -137,117 +137,130 @@ export const TopUsersScreen = () => {
                                     .slice(0, 100)
                                     .map((user, index) => (
                                         <div key={user._id} className='top-user-block'>
-                                            {index === 0 &&
-                                                <div className='top-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <img className={'top-user-block-img'} src={place1}
-                                                             alt="First Place"/>
-                                                        <div>
-                                                            <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
-                                                            <p>Score:<b>{user.overallScore}</b></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>League:</p>
-                                                        <b className={`leagueName diamond`}>Diamond</b>
+                                            <div className='top-user-info after-fourth-user-info'>
+                                                <div className='top-user-title'>
+                                                    <b className='after-fourth-user-place'>{index + 1}.</b>
+                                                    <div>
+                                                        <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
+                                                        <p>lvl 12</p>
                                                     </div>
                                                 </div>
-                                            }
-                                            {index === 1 &&
-                                                <div className='top-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <img className={'top-user-block-img'} src={place2}
-                                                             alt="Second Place"/>
-                                                        <div>
-                                                            <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
-                                                            <p>Score:<b>{user.overallScore}</b></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>League:</p>
-                                                        <b className={`leagueName diamond`}>Diamond</b>
-                                                    </div>
+                                                <div className='top-user-score'>
+                                                    <p>Score:</p>
+                                                    <b>{user.overallScore}</b>
                                                 </div>
-                                            }
-                                            {index === 2 &&
-                                                <div className='top-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <img className={'top-user-block-img'} src={place3}
-                                                             alt="Third Place"/>
-                                                        <div>
-                                                            <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
-                                                            <p>Score:<b>{user.overallScore}</b></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>League:</p>
-                                                        <b className={`leagueName diamond`}>Diamond</b>
-                                                    </div>
-                                                </div>
-                                            }
-                                            {index >= 3 && index < 10 &&
-                                                <div className='top-user-info after-fourth-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <div className="image-container">
-                                                            <img src={place10} alt="Third Place"/>
-                                                            <b className="after-fourth-to-ten-user-place">{index + 1}</b>
-                                                        </div>
-                                                        <div>
-                                                            <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
-                                                            <p>Score:<b>{user.overallScore}</b></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>League:</p>
-                                                        <b className={`leagueName golden`}>Golden</b>
-                                                    </div>
-                                                </div>
-                                            }
-                                            {index >= 10 && index < 20 &&
-                                                <div className='top-user-info after-fourth-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <b className='after-fourth-user-place'>{index + 1}.</b>
-                                                        <div>
-                                                            <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
-                                                            <p>Score:<b>{user.overallScore}</b></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>League:</p>
-                                                        <b className={`leagueName silver`}>Silver</b>
-                                                    </div>
-                                                </div>
-                                            }
-                                            {index >= 20 && index < 50 &&
-                                                <div className='top-user-info after-fourth-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <b className='after-fourth-user-place'>{index + 1}.</b>
-                                                        <div>
-                                                            <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
-                                                            <p>Score:<b>{user.overallScore}</b></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>League:</p>
-                                                        <b className={`leagueName bronze`}>Bronze</b>
-                                                    </div>
-                                                </div>
-                                            }
-                                            {index >= 50 &&
-                                                <div className='top-user-info after-fourth-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <b className='after-fourth-user-place'>{index + 1}.</b>
-                                                        <div>
-                                                            <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>
-                                                            <p>Score:<b>{user.overallScore}</b></p>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>League:</p>
-                                                        <b className={`leagueName stone`}>Stone</b>
-                                                    </div>
-                                                </div>
-                                            }
+                                            </div>
+                                            {/*{index === 0 &&*/}
+                                            {/*    <div className='top-user-info'>*/}
+                                            {/*        <div className='top-user-title'>*/}
+                                            {/*            <img className={'top-user-block-img'} src={place1}*/}
+                                            {/*                 alt="First Place"/>*/}
+                                            {/*            <div>*/}
+                                            {/*                <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>*/}
+                                            {/*                <p>Score:<b>{user.overallScore}</b></p>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className='top-user-score'>*/}
+                                            {/*            <p>League:</p>*/}
+                                            {/*            <b className={`leagueName diamond`}>Diamond</b>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*}*/}
+                                            {/*{index === 1 &&*/}
+                                            {/*    <div className='top-user-info'>*/}
+                                            {/*        <div className='top-user-title'>*/}
+                                            {/*            <img className={'top-user-block-img'} src={place2}*/}
+                                            {/*                 alt="Second Place"/>*/}
+                                            {/*            <div>*/}
+                                            {/*                <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>*/}
+                                            {/*                <p>Score:<b>{user.overallScore}</b></p>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className='top-user-score'>*/}
+                                            {/*            <p>League:</p>*/}
+                                            {/*            <b className={`leagueName diamond`}>Diamond</b>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*}*/}
+                                            {/*{index === 2 &&*/}
+                                            {/*    <div className='top-user-info'>*/}
+                                            {/*        <div className='top-user-title'>*/}
+                                            {/*            <img className={'top-user-block-img'} src={place3}*/}
+                                            {/*                 alt="Third Place"/>*/}
+                                            {/*            <div>*/}
+                                            {/*                <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>*/}
+                                            {/*                <p>Score:<b>{user.overallScore}</b></p>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className='top-user-score'>*/}
+                                            {/*            <p>League:</p>*/}
+                                            {/*            <b className={`leagueName diamond`}>Diamond</b>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*}*/}
+                                            {/*{index >= 3 && index < 10 &&*/}
+                                            {/*    <div className='top-user-info after-fourth-user-info'>*/}
+                                            {/*        <div className='top-user-title'>*/}
+                                            {/*            <div className="image-container">*/}
+                                            {/*                <img src={place10} alt="Third Place"/>*/}
+                                            {/*                <b className="after-fourth-to-ten-user-place">{index + 1}</b>*/}
+                                            {/*            </div>*/}
+                                            {/*            <div>*/}
+                                            {/*                <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>*/}
+                                            {/*                <p>Score:<b>{user.overallScore}</b></p>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className='top-user-score'>*/}
+                                            {/*            <p>League:</p>*/}
+                                            {/*            <b className={`leagueName golden`}>Golden</b>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*}*/}
+                                            {/*{index >= 10 && index < 20 &&*/}
+                                            {/*    <div className='top-user-info after-fourth-user-info'>*/}
+                                            {/*        <div className='top-user-title'>*/}
+                                            {/*            <b className='after-fourth-user-place'>{index + 1}.</b>*/}
+                                            {/*            <div>*/}
+                                            {/*                <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>*/}
+                                            {/*                <p>Score:<b>{user.overallScore}</b></p>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className='top-user-score'>*/}
+                                            {/*            <p>League:</p>*/}
+                                            {/*            <b className={`leagueName silver`}>Silver</b>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*}*/}
+                                            {/*{index >= 20 && index < 50 &&*/}
+                                            {/*    <div className='top-user-info after-fourth-user-info'>*/}
+                                            {/*        <div className='top-user-title'>*/}
+                                            {/*            <b className='after-fourth-user-place'>{index + 1}.</b>*/}
+                                            {/*            <div>*/}
+                                            {/*                <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>*/}
+                                            {/*                <p>Score:<b>{user.overallScore}</b></p>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className='top-user-score'>*/}
+                                            {/*            <p>League:</p>*/}
+                                            {/*            <b className={`leagueName bronze`}>Bronze</b>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*}*/}
+                                            {/*{index >= 50 &&*/}
+                                            {/*    <div className='top-user-info after-fourth-user-info'>*/}
+                                            {/*        <div className='top-user-title'>*/}
+                                            {/*            <b className='after-fourth-user-place'>{index + 1}.</b>*/}
+                                            {/*            <div>*/}
+                                            {/*                <b>{!user.username || user.username === '' || user.username === null || user.username === undefined ? 'Unknown Adventurer' : user.username}</b>*/}
+                                            {/*                <p>Score:<b>{user.overallScore}</b></p>*/}
+                                            {/*            </div>*/}
+                                            {/*        </div>*/}
+                                            {/*        <div className='top-user-score'>*/}
+                                            {/*            <p>League:</p>*/}
+                                            {/*            <b className={`leagueName stone`}>Stone</b>*/}
+                                            {/*        </div>*/}
+                                            {/*    </div>*/}
+                                            {/*}*/}
                                         </div>
                                     ))}
                             </div>

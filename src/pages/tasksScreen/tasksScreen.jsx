@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import './storeScreen.css';
+import './tasksScreen.css';
 import {useTelegram} from "../../hooks/useTelegram";
 import {getUserData, updateAxe} from "../../httpRequests/dragonEggApi";
 import NavBar from "../../components/navBar/navBar";
@@ -16,7 +16,7 @@ import helmet from "../../img/icons/profile.png";
 import useStore from "../../store/zustand.store/store";
 
 
-export const StoreScreen = () => {
+export const TasksScreen = () => {
 
     //const [userData, setUserData] = useState({});
     //const [axeData, setAxeData] = useState(storeTemplateData.storeItems.find(item => item.name === 'Axe'));
@@ -323,107 +323,76 @@ export const StoreScreen = () => {
                                     <div>
                                         <div className={'store-product-item-info'}>
                                             <div className={'store-product-item-info-block'}>
-                                                <b className={'store-product-item-info-title'}>Damage</b>
-                                                <p className={'store-product-item-description'}>lvl 2</p>
+                                                <b className={'store-product-item-info-title'}>Subscribe to our X</b>
                                             </div>
                                         </div>
                                         <div>
-                                            {hammer?.currentLevel === 8 ? (
-                                                <div>
-                                                    Update: <b>{hammer?.income[hammer?.currentLevel - 1]}</b>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    Update: <b>{hammer?.income[hammer?.currentLevel - 1]}</b> {'⇾ '}
-                                                    <b>{hammer?.income[hammer?.currentLevel]}</b>
-                                                </div>
-                                            )}
+                                            <div className={'store-product-upgrade-nums'}>
+                                                <p>Reward: 1000</p>
+                                                <img src={scoreCoin}></img>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className={'upgrade-btn' + (isPurchaseError.hammer ? ' error' : '')}
-                                     onClick={handleHammerUpgrade}>
+                                <div className={'upgrade-btn'}>
                                     {hammer?.currentLevel === 8 ? (
-                                        <p>MAX lvl</p>
+                                        <p>Done</p>
                                     ) : (
-                                        <div className={'store-product-upgrade-nums'}>
-                                            <p>{hammer?.price[hammer?.currentLevel - 1]}</p>
-                                            <img src={scoreCoin}></img>
-                                        </div>
+                                        <p>Do it!</p>
                                     )}
 
                                 </div>
                             </div>
                         </div>
                         <div className={'store-product-item'}>
-
                             <div className={'store-product-item-upgrade-block'}>
                                 <div>
-                                    <div className={'store-product-item-info'}>
-                                        <div className={'store-product-item-info-block'}>
-                                            <b className={'store-product-item-info-title'}>Energy</b>
-                                            <p className={'store-product-item-description'}>lvl 2</p>
+                                    <div>
+                                        <div className={'store-product-item-info'}>
+                                            <div className={'store-product-item-info-block'}>
+                                                <b className={'store-product-item-info-title'}>Join the chat</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className={'store-product-upgrade-nums'}>
+                                                <p>Reward: 1000</p>
+                                                <img src={scoreCoin}></img>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        {energy?.currentLevel === 8 ? (
-                                            <div>
-                                                Limit: <b>{energy?.energyCapacity[energy?.currentLevel - 1]}</b>
-                                            </div>
-                                        ) : (
-                                            <div>
-                                                Limit: <b>{energy?.energyCapacity[energy?.currentLevel - 1]}</b> {'⇾ '}
-                                                <b>{energy?.energyCapacity[energy?.currentLevel]}</b>
-                                            </div>
-                                        )}
-                                    </div>
                                 </div>
-                                <div className={'upgrade-btn' + (isPurchaseError.energyBottle ? ' error' : '')}
-                                     onClick={handleEnergyBottleUpgrade}>
+                                <div className={'upgrade-btn'}>
                                     {energy?.currentLevel === 8 ? (
-                                        <p>MAX lvl</p>
+                                        <p>Done</p>
                                     ) : (
-                                        <div className={'store-product-upgrade-nums'}>
-                                            <p>{energy?.price[energy?.currentLevel - 1]}</p>
-                                            <img src={scoreCoin}></img>
-                                        </div>
+                                        <p>Do it!</p>
                                     )}
 
                                 </div>
                             </div>
                         </div>
                         <div className={'store-product-item'}>
-                            <div className={'store-product-item-info'}>
-
-                            </div>
                             <div className={'store-product-item-upgrade-block'}>
                                 <div>
-                                    <div className={'store-product-item-info-block'}>
-                                        <b className={'store-product-item-info-title'}>Recharging</b>
-                                        <p className={'store-product-item-description'}>lvl 2</p>
-                                    </div>
                                     <div>
-                                        {axe?.currentLevel === 8 ? (
-                                            <div>
-                                                Duration: <b>{axe?.timeOfUse[axe?.currentLevel - 1]}/s</b>
+                                        <div className={'store-product-item-info'}>
+                                            <div className={'store-product-item-info-block'}>
+                                                <b className={'store-product-item-info-title'}>Subscribe to our Inst</b>
                                             </div>
-                                        ) : (
-                                            <div>
-                                                Duration: <b>{axe?.timeOfUse[axe?.currentLevel - 1]}/s</b> {'⇾ '}
-                                                <b>{axe?.timeOfUse[axe?.currentLevel]}/s</b>
+                                        </div>
+                                        <div>
+                                            <div className={'store-product-upgrade-nums'}>
+                                                <p>Reward: 1000</p>
+                                                <img src={scoreCoin}></img>
                                             </div>
-                                        )}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className={'upgrade-btn' + (isPurchaseError.axe ? ' error' : '')}
-                                     onClick={handleAxeUpgrade}>
+                                <div className={'upgrade-btn'}>
                                     {axe?.currentLevel === 8 ? (
-                                        <p>MAX lvl</p>
+                                        <p>Done</p>
                                     ) : (
-                                        <div className={'store-product-upgrade-nums'}>
-                                            <p>{axe?.price[axe?.currentLevel - 1]}</p>
-                                            <img src={scoreCoin}></img>
-                                        </div>
+                                        <p>Do it!</p>
                                     )}
 
                                 </div>
@@ -438,4 +407,4 @@ export const StoreScreen = () => {
     );
 }
 
-export default StoreScreen;
+export default TasksScreen;

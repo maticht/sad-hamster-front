@@ -1,7 +1,7 @@
 .share-screen {
     height: 100vh;
     text-align: center;
-    background-image: url('../../img/background/InviteFriends.png');
+    background-image: url('../../img/background/brightSpace.png');
     background-size: cover;
     background-position: center;
 }
@@ -24,8 +24,6 @@
     flex-direction: column;
 }
 .headerShareBlock{
-    height: 50px;
-    backdrop-filter: blur(2px);
     display: flex;
     justify-content: space-between;
     padding: 0;
@@ -39,7 +37,7 @@
 }
 .share-scroll-block{
     z-index: 1;
-    padding-top: 64px;
+    padding-top: 90px;
     padding-bottom: 5px;
     width: 100%;
 }
@@ -55,10 +53,11 @@
     width: calc(100% - 60px);
     margin: 15px auto 0;
     align-items: flex-start;
-    border: 2.5px solid #111111;
+    border-radius: 18px;
     backdrop-filter: blur(2px);
-    border-radius: 2px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(131, 176, 218, 0.06);
+    border: 1px solid rgba(157, 173, 228, 0.22);
+    color: #f5f5f5;
     padding: 8px 15px;
 }
 .share-info-block h2{
@@ -79,14 +78,15 @@
     flex-direction: column;
     width: calc(100% - 5px);
     align-items: flex-start;
-    border: 2.5px solid #111111;
+    border-radius: 18px;
     backdrop-filter: blur(2px);
-    border-radius: 2px;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(131, 176, 218, 0.06);
+    border: 1px solid rgba(157, 173, 228, 0.22);
+    color: #f5f5f5;
     padding: 8px 0 -5px;
     margin-bottom: 75px;
     height: 100%;
-    max-height: calc(100vh - 325px);
+    max-height: calc(100vh - 345px);
     overflow-y: auto;
 }
 
@@ -115,12 +115,13 @@
     margin: 0 0 0 15px;
 }
 .referral-user-score{
-    border: 2.5px solid #111111;
-    border-radius: 2px;
-    background-color: rgba(204, 204, 204, 0.5);
-    font-family: "Pixelify Sans", serif;
+    font-family: "Lexend", sans-serif;
+    color: #f5f5f5;
+    border: 1px solid rgba(157, 173, 228, 0.22);
+    background-color: rgba(131, 176, 218, 0.26);
+    backdrop-filter: blur(2px);
+    border-radius: 20px;
     display: flex;
-    color: black;
     justify-content: space-between;
     padding: 4px 10px;
     align-items: center;
@@ -142,15 +143,15 @@
 }
 .share-info-block a{
     text-decoration: none;
-    color: #000;
-    font-family: "Pixelify Sans", serif;
     align-self: self-end;
     font-size: 14px;
     margin: 0 0 2px;
-    border: 2.5px solid #111111;
+    font-family: "Lexend", sans-serif;
+    color: #f5f5f5;
+    border: 1px solid rgba(157, 173, 228, 0.22);
+    background-color: rgba(131, 176, 218, 0.26);
     backdrop-filter: blur(2px);
-    border-radius: 2px;
-    background-color: rgba(188, 188, 188, 0.5);
+    border-radius: 20px;
     padding: 8px 15px;
 }
 

@@ -4,7 +4,7 @@ import {useTelegram} from "../../hooks/useTelegram";
 import {getUserData} from "../../httpRequests/dragonEggApi";
 import NavBar from "../../components/navBar/navBar";
 import {collectFromInvitees, replenishmentFromInvitees} from "../../httpRequests/dragonEggApi";
-import scoreCoin from "../../img/icons/scoreCoin.png";
+import scoreCoin from "../../img/icons/sadCoin.png";
 import {Link} from "react-router-dom";
 import helmet from "../../img/icons/profile.png";
 import torch from "../../img/icons/torch.png";
@@ -144,26 +144,33 @@ export const ShareScreen = () => {
             <div className="share-container">
                 <div className={'headerShareBlock'}>
                     <div className="header-container">
-                        <Link to={'/profile'} className={'headerLightLink'}>
-                            <img src={helmet} alt={"logo"}/>
-                        </Link>
+                        {/*<Link to={'/profile'} className={'headerLightLink'}>*/}
+                        {/*    <img src={helmet} alt={"logo"}/>*/}
+                        {/*</Link>*/}
                         <div className={'headerScoreBlock'}>
                             <div className={'headerScoreText'}>
-                                <h2>{score}</h2>
-                                {/*<p>{(userData.score * 0.00008 * 1.5).toFixed(2)} $</p>*/}
+                                <img src={scoreCoin}></img>
+                                <p>{score}</p>
                             </div>
-                            <img src={scoreCoin}></img>
                         </div>
-                        <div className={'headerLink'} onClick={handleModalToggle}>
-                            <img src={torch} alt={"logo"}/>
+                        <p className={'lvlText'}>lvl 12</p>
+                        <div className="lvl-progress-container">
+                            <div className={'lvl-progress-bar'}>
+                                <div className={'lvl-progress-line'}
+                                     style={{width: `55%`}}
+                                ></div>
+                            </div>
                         </div>
+                        {/*<div className={'headerLink'} onClick={handleModalToggle}>*/}
+                        {/*    <img src={torch} alt={"logo"}/>*/}
+                        {/*</div>*/}
                     </div>
                 </div>
                 {showModal && <ComingSoonModal onClose={handleModalToggle}/>}
                 <div className="share-scroll-block">
                     <div className='share-info-block'>
                         <h2>Invite your friends</h2>
-                        <p>Invite your friends and receive <b>250 coins</b> for each new user, as well as <b>8%</b> of
+                        <p>Invite your friends and receive <b>250 coins</b> for each new user, as well as <b>10%</b> of
                             the
                             invitee’s income every 24 hours</p>
                         <a href={`https://telegram.me/share/url?url=${encodeURIComponent(`https://t.me/dragons_Eggs_bot?start=${userId}`)}`}
@@ -190,6 +197,60 @@ export const ShareScreen = () => {
                                     </div>
                                 </div>
                                 <div className='top-users-list'>
+                                    {referralUsers?.length && referralUsers
+                                        .sort((a, b) => b.score - a.score)
+                                        .map((user, index) => (
+                                            <div key={user._id} className='top-user-block'>
+                                                <div className='top-user-info after-fourth-user-info'>
+                                                    <div className='top-user-title'>
+                                                        <div>
+                                                            <p>{user.firstName} {user.lastName}</p>
+                                                            <b>{user.username}</b>
+                                                        </div>
+                                                    </div>
+                                                    <div className='top-user-score'>
+                                                        <p>Score:</p>
+                                                        <b>{!user.score ? '0' : user.score}</b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    {referralUsers?.length && referralUsers
+                                        .sort((a, b) => b.score - a.score)
+                                        .map((user, index) => (
+                                            <div key={user._id} className='top-user-block'>
+                                                <div className='top-user-info after-fourth-user-info'>
+                                                    <div className='top-user-title'>
+                                                        <div>
+                                                            <p>{user.firstName} {user.lastName}</p>
+                                                            <b>{user.username}</b>
+                                                        </div>
+                                                    </div>
+                                                    <div className='top-user-score'>
+                                                        <p>Score:</p>
+                                                        <b>{!user.score ? '0' : user.score}</b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    {referralUsers?.length && referralUsers
+                                        .sort((a, b) => b.score - a.score)
+                                        .map((user, index) => (
+                                            <div key={user._id} className='top-user-block'>
+                                                <div className='top-user-info after-fourth-user-info'>
+                                                    <div className='top-user-title'>
+                                                        <div>
+                                                            <p>{user.firstName} {user.lastName}</p>
+                                                            <b>{user.username}</b>
+                                                        </div>
+                                                    </div>
+                                                    <div className='top-user-score'>
+                                                        <p>Score:</p>
+                                                        <b>{!user.score ? '0' : user.score}</b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     {referralUsers?.length && referralUsers
                                         .sort((a, b) => b.score - a.score)
                                         .map((user, index) => (

@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './LoadingScreen.css';
+import loadingHamster from "../../img/icons/loadingHamster.png"
+import tapScreenHamster from "../../img/icons/tapScreenHamster.png"
 import {useTelegram} from "../../hooks/useTelegram";
 import {getUserData} from "../../httpRequests/dragonEggApi";
 import {useNavigate} from 'react-router-dom';
@@ -212,29 +214,20 @@ export const LoadingScreen = () => {
     };
 
     return (
-        <div className="loading-screen" onClick={handleLoadingScreenClick}>
-            <div className="eggLoader">
+        <div className={`loading-screen ${showTapMessage ? 'active' : ''}`} onClick={handleLoadingScreenClick}>
+            <div className="hamsterLoader">
                 <img
-                    src={'https://res.cloudinary.com/dfl7i5tm2/image/upload/v1714130717/dragonEggs/eggRarity1Stage1_et105p.png'}
-                    alt="LoadingEgg"/>
+                    src={!showTapMessage ? loadingHamster : tapScreenHamster}
+                    alt="Loading..."/>
             </div>
-            <p className={'loaderTitle'}>{!showTapMessage ? loadingText : 'Loading complete'}</p>
-            <div className="energy-progress-container">
-                <div className={'energy-progress-bar'}>
-                    <div className={'energy-progress-line'}
+            <p className={'loaderTitle'}>{!showTapMessage ? `${progress} %` : 'Loading complete'}</p>
+            <div className="hamster-loader-progress-container">
+                <div className={'hamster-loader-progress-bar'}>
+                    <div className={'hamster-loader-progress-line'}
                          style={{width: `${progress}%`}}
                     ></div>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
                 </div>
-                <p className="progress-text"><b>{progress}</b>%</p>
             </div>
-            {!showTapMessage && <p className={'loaderSubTitle'}>{getLoadingMessage(progress)}</p>}
-            {showTapMessage && <p className={'loaderTapBtn'}>Tap your screen</p>}
         </div>
     );
 };

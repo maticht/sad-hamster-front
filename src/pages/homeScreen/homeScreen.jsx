@@ -16,8 +16,9 @@ import {barrelExpectation, collectionBarrel} from "../../httpRequests/dragonEggA
 import NavBar from "../../components/navBar/navBar";
 import Space from "../../components/space/space";
 import helmet from "../../img/icons/profile.png";
-import scoreCoin from "../../img/icons/scoreCoin.png";
+import scoreCoin from "../../img/icons/sadCoin.png";
 import torch from "../../img/icons/torch.png";
+import bubbleHamster from '../../img/icons/sadbubble.png'
 import soundOn from "../../img/sound/soundOn.png"
 import soundOff from "../../img/sound/soundOff.png"
 import calendar from "../../img/icons/calendar.png"
@@ -594,7 +595,8 @@ export const HomeScreen = () => {
 
     return (
         <div className="App"
-             style={{backgroundImage: theme === 'day' ? `url(${background})` : `url(${backgroundNight})`}}>
+             // style={{backgroundImage: theme === 'day' ? `url(${background})` : `url(${backgroundNight})`}}
+        >
             {/*{eggScore >= 88 && showOverlay && (*/}
             {/*    <div className={`white-overlay`}>*/}
             {/*        <img src={smokeAnimation} alt="Smoke Animation"/>*/}
@@ -604,101 +606,109 @@ export const HomeScreen = () => {
                 <header className="header-main-container">
                     <div className={'headerHomeBlock'}>
                         <div className="header-container">
-                            <Link to={'/profile'} className={'headerLightLink'}>
-                                <img src={helmet} alt={"logo"}/>
-                            </Link>
+                            {/*<Link to={'/profile'} className={'headerLightLink'}>*/}
+                            {/*    <img src={helmet} alt={"logo"}/>*/}
+                            {/*</Link>*/}
                             <div className={'headerScoreBlock'}>
                                 <div className={'headerScoreText'}>
-                                    <h2>{score}</h2>
+                                    <img src={scoreCoin}></img>
+                                    <p>{score}</p>
                                 </div>
-                                <img src={scoreCoin}></img>
                             </div>
-                            <div className={'headerLink'} onClick={handleModalToggle}>
-                                <img src={torch} alt={"logo"}/>
+                            <p className={'lvlText'}>lvl 12</p>
+                            <div className="lvl-progress-container">
+                                <div className={'lvl-progress-bar'}>
+                                    <div className={'lvl-progress-line'}
+                                         style={{width: `${(energy.value * 100) / energy.energyCapacity[energy.currentLevel - 1]}%`}}
+                                    ></div>
+                                </div>
                             </div>
+                            {/*<div className={'headerLink'} onClick={handleModalToggle}>*/}
+                            {/*    <img src={torch} alt={"logo"}/>*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                     {showModal && <ComingSoonModal onClose={handleModalToggle}/>}
-                    {newEggModal && <NewEggModal onClose={handleNewEggModalToggle}/>}
-                    {dailyRewardModal && !unclaimedReward && <DailyRewardModal onClose={() => {
-                        handleDailyRewardModalToggle()
-                    }} onCollectReward={handleCollectReward}/>}
-                    {unclaimedReward &&
-                        <WeeklyRewardModal userData={userData} unclaimedReward={unclaimedReward} onClose={() => {
-                            handleWeeklyRewardModalToggle()
-                        }}/>}
-                    <div className={'filling-barrel-container'}>
-                        <img className={'filling-barrel-img'}
-                             src={barrel?.images[barrel?.currentLevel - 1]} alt={'barrel'}/>
-                        <div className={'filling-barrel-info'}>
-                            <div className={'barrel-progress-bar'}>
-                                <div className={'barrel-progress-line'} style={{width: `${barrelProgress}%`}}></div>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                            <div className={'filling-barrel-footer'}>
-                                <div className={'barrel-end-time'}>
-                                    <p>Time left:</p>
-                                    {new Date(barrel.lastEntrance).getTime() === expectedDate.getTime() ? (
-                                        <b>00:00:00</b>
-                                    ) : (
-                                        <b>{countdown}</b>
-                                    )}
-                                </div>
-                                {new Date(barrel.lastEntrance).getTime() === expectedDate.getTime() ? (
-                                    <button className={'barrel-collect-btn'} onClick={handleBarrelExpectation}>
-                                        <p>Start!</p>
-                                    </button>
-                                ) : (
-                                    <button
-                                        className={`barrel-collect-btn ${countdown !== '00:00:00' ? 'disabled' : ''}`}
-                                        onClick={handleCollectionBarrel}>
-                                        <p>Collect</p>
-                                        <div>
-                                            <b>{barrel?.income[barrel?.currentLevel - 1]}</b>
-                                            <img src={scoreCoin}></img>
-                                        </div>
-                                    </button>
-                                )}
+                    {/*{newEggModal && <NewEggModal onClose={handleNewEggModalToggle}/>}*/}
+                    {/*{dailyRewardModal && !unclaimedReward && <DailyRewardModal onClose={() => {*/}
+                    {/*    handleDailyRewardModalToggle()*/}
+                    {/*}} onCollectReward={handleCollectReward}/>}*/}
+                    {/*{unclaimedReward &&*/}
+                    {/*    <WeeklyRewardModal userData={userData} unclaimedReward={unclaimedReward} onClose={() => {*/}
+                    {/*        handleWeeklyRewardModalToggle()*/}
+                    {/*    }}/>}*/}
+                    {/*<div className={'filling-barrel-container'}>*/}
+                    {/*    <img className={'filling-barrel-img'}*/}
+                    {/*         src={barrel?.images[barrel?.currentLevel - 1]} alt={'barrel'}/>*/}
+                    {/*    <div className={'filling-barrel-info'}>*/}
+                    {/*        <div className={'barrel-progress-bar'}>*/}
+                    {/*            <div className={'barrel-progress-line'} style={{width: `${barrelProgress}%`}}></div>*/}
+                    {/*            <span></span>*/}
+                    {/*            <span></span>*/}
+                    {/*            <span></span>*/}
+                    {/*            <span></span>*/}
+                    {/*            <span></span>*/}
+                    {/*            <span></span>*/}
+                    {/*            <span></span>*/}
+                    {/*        </div>*/}
+                    {/*        <div className={'filling-barrel-footer'}>*/}
+                    {/*            <div className={'barrel-end-time'}>*/}
+                    {/*                <p>Time left:</p>*/}
+                    {/*                {new Date(barrel.lastEntrance).getTime() === expectedDate.getTime() ? (*/}
+                    {/*                    <b>00:00:00</b>*/}
+                    {/*                ) : (*/}
+                    {/*                    <b>{countdown}</b>*/}
+                    {/*                )}*/}
+                    {/*            </div>*/}
+                    {/*            {new Date(barrel.lastEntrance).getTime() === expectedDate.getTime() ? (*/}
+                    {/*                <button className={'barrel-collect-btn'} onClick={handleBarrelExpectation}>*/}
+                    {/*                    <p>Start!</p>*/}
+                    {/*                </button>*/}
+                    {/*            ) : (*/}
+                    {/*                <button*/}
+                    {/*                    className={`barrel-collect-btn ${countdown !== '00:00:00' ? 'disabled' : ''}`}*/}
+                    {/*                    onClick={handleCollectionBarrel}>*/}
+                    {/*                    <p>Collect</p>*/}
+                    {/*                    <div>*/}
+                    {/*                        <b>{barrel?.income[barrel?.currentLevel - 1]}</b>*/}
+                    {/*                        <img src={scoreCoin}></img>*/}
+                    {/*                    </div>*/}
+                    {/*                </button>*/}
+                    {/*            )}*/}
 
-                            </div>
-                        </div>
-                    </div>
-                    <div className={'additionalButtonsBlock'}>
-                        <div>
-                            <div className={'homeReward'} onClick={handleDailyRewardModalToggle}>
-                                <img src={calendar} alt={"logo"}/>
-                            </div>
-                            <div className="sound-container">
-                                <div className="sound-block" onClick={toggleMusic}>
-                                    <div className="sound-image-container">
-                                        {backgroundMusicIsPlaying === true ?
-                                            <img src={soundOn}/>
-                                            : backgroundMusicIsPlaying === false &&
-                                            <img src={soundOff}/>
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div disabled={axeButtonActive || clickCounter < 100} onClick={activateAxeButton}>
-                            <button
-                                disabled={axeButtonActive || clickCounter < 100}
-                                className={`axeToggle ${clickCounter > 100 && 'axeToggleActive'}`}
-                            >
-                                <img src={axe?.images[axe?.currentLevel - 1]} alt="logo"/>
-                                <div className={`axe-progress-line`} style={{height: `${clickCounter}%`}}></div>
-                            </button>
-                            {clickCounter > 100 && (
-                                <p className={'axeToggleActiveText'}>Tap<br/>to use!</p>
-                            )}
-                        </div>
-                    </div>
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
+                    {/*<div className={'additionalButtonsBlock'}>*/}
+                    {/*    <div>*/}
+                    {/*        <div className={'homeReward'} onClick={handleDailyRewardModalToggle}>*/}
+                    {/*            <img src={calendar} alt={"logo"}/>*/}
+                    {/*        </div>*/}
+                    {/*        <div className="sound-container">*/}
+                    {/*            <div className="sound-block" onClick={toggleMusic}>*/}
+                    {/*                <div className="sound-image-container">*/}
+                    {/*                    {backgroundMusicIsPlaying === true ?*/}
+                    {/*                        <img src={soundOn}/>*/}
+                    {/*                        : backgroundMusicIsPlaying === false &&*/}
+                    {/*                        <img src={soundOff}/>*/}
+                    {/*                    }*/}
+                    {/*                </div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*    <div disabled={axeButtonActive || clickCounter < 100} onClick={activateAxeButton}>*/}
+                    {/*        <button*/}
+                    {/*            disabled={axeButtonActive || clickCounter < 100}*/}
+                    {/*            className={`axeToggle ${clickCounter > 100 && 'axeToggleActive'}`}*/}
+                    {/*        >*/}
+                    {/*            <img src={axe?.images[axe?.currentLevel - 1]} alt="logo"/>*/}
+                    {/*            <div className={`axe-progress-line`} style={{height: `${clickCounter}%`}}></div>*/}
+                    {/*        </button>*/}
+                    {/*        {clickCounter > 100 && (*/}
+                    {/*            <p className={'axeToggleActiveText'}>Tap<br/>to use!</p>*/}
+                    {/*        )}*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
                 </header>
                 <div className="clickable-area"
@@ -709,27 +719,13 @@ export const HomeScreen = () => {
 
                 </div>
                 <div className="pedestal-container">
-                    <div className="pedestal-block">
-                        <img src={theme === "day" ? pedestal : pedestalNight} alt="pedestal"/>
-                    </div>
-                    {blockType === 'overlay' ? (
-                        <button className="pedestal-overlay"
-                                onTouchStart={handleMultiTouchStart}
-                                onTouchEnd={handleMultiTouchEnd}
-                                onTouchMove={(e) => e.preventDefault()}
-                        >
-                            <img src={eggImage} alt="Egg"/>
-                        </button>
-                    ) : blockType === 'space' && (
-                        <button className="pedestal-space-overlay"
-                                onTouchStart={handleMultiTouchStart}
-                                onTouchEnd={handleMultiTouchEnd}
-                                onTouchMove={(e) => e.preventDefault()}
-
-                        >
-                            <Space/>
-                        </button>
-                    )}
+                    <button className="pedestal-overlay"
+                            onTouchStart={handleMultiTouchStart}
+                            onTouchEnd={handleMultiTouchEnd}
+                            onTouchMove={(e) => e.preventDefault()}
+                    >
+                        <img src={bubbleHamster} alt="bubbleHamster"/>
+                    </button>
 
                     {clickEffects}
                 </div>

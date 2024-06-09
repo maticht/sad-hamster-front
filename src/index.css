@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "Pixelify Sans", serif;
+  font-family: "Lexend", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 550px;
@@ -8,5 +8,5 @@ body {
 }
 
 code {
-  font-family: "Pixelify Sans", serif
+  font-family: "Lexend", sans-serif;
 }

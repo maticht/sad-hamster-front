@@ -1,8 +1,9 @@
 import './navBar.css';
-import home from '../../img/navbar/home3.png';
-import store from '../../img/navbar/store3.png';
-import shear from '../../img/navbar/shearClan3.png';
-import wallet from '../../img/icons/scoreCoin.png';
+import iconRef from '../../img/navbar/refSad.png';
+import iconTask from '../../img/navbar/taskSad.png';
+import iconHome from '../../img/navbar/homeSad.png';
+import iconBoost from '../../img/navbar/boostSad.png';
+import iconTop from '../../img/navbar/topSad.png';
 import { Link, useLocation } from "react-router-dom";
 import React from "react";
 
@@ -11,17 +12,35 @@ function NavBar() {
 
     return (
         <div className={'navBarBlock'}>
-            <Link to="/" className={`navBarLink ${location.pathname === '/' ? 'active' : ''}`}>
-                <img src={home} className={"App-logo"} alt={"logo"} />
+            <Link to="/share" className={`navBarLink`}>
+                {location.pathname !== '/share' ?
+                    <p>Ref</p> :
+                    <img src={iconRef} alt={"logo"} />
+                }
             </Link>
-            <Link to="/store" className={`navBarLink ${location.pathname === '/store' ? 'active' : ''}`}>
-                <img src={store} className={"App-logo"} alt={"logo"} />
+            <Link to="/tasksScreen" className={`navBarLink`}>
+                {location.pathname !== '/tasksScreen' ?
+                    <p>Task</p> :
+                    <img src={iconTask} alt={"logo"} />
+                }
             </Link>
-            <Link to="/share" className={`navBarLink ${location.pathname === '/share' ? 'active' : ''}`}>
-                <img src={shear} alt={"logo"} />
+            <Link to="/" className={`navBarLink`}>
+                {location.pathname !== '/' ?
+                    <p>Home</p> :
+                    <img src={iconHome} alt={"logo"} />
+                }
             </Link>
-            <Link to="/wallet" className={`navBarLink ${location.pathname === '/wallet' ? 'active' : ''}`}>
-                <img src={wallet} alt={"logo"} />
+            <Link to="/store" className={`navBarLink`}>
+                {location.pathname !== '/store' ?
+                    <p>Boost</p> :
+                    <img src={iconBoost} alt={"logo"} />
+                }
+            </Link>
+            <Link to="/topUsersScreen" className={`navBarLink`}>
+                {location.pathname !== '/topUsersScreen' ?
+                    <p>Top</p> :
+                    <img src={iconTop} alt={"logo"} />
+                }
             </Link>
         </div>
     );
