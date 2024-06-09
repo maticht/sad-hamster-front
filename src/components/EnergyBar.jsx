@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import energyIcon from '../img/icons/energy.png';
+import miniGame from '../img/icons/miniGame.png';
 import storeTemplateData from "../storeTemplateData/storeTemplateData.json";
+import {Link} from "react-router-dom";
 
 const EnergyBar = ({userEnergy}) => {
 
@@ -15,6 +17,12 @@ const EnergyBar = ({userEnergy}) => {
 
     return energy && (
         <div>
+            <div className="mini-game-block">
+                <img src={miniGame} alt={'miniGame'}/>
+                <Link to={'/miniGameScreen'} className="mini-game-btn">
+                    Click to earn
+                </Link>
+            </div>
             <p className="progress-text">
                 <img src={energyIcon} alt="energy" />
                 <b>{energy.value}</b>

@@ -11,6 +11,7 @@ import FaultAppearanceScene from "./pages/faultAppearanceScene/faultAppearanceSc
 import GettingEggScene from "./pages/gettingEggScene/gettingEggScene";
 import LoadingScreen from "./pages/LoadingScreen/LoadingScreen";
 import TasksScreen from "./pages/tasksScreen/tasksScreen";
+import MiniGameScreen from "./pages/miniGameScreen/miniGameScreen";
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                     <Route path='/gettingEggScene' element={<GettingEggScene/>}/>
                     <Route path='/loadingScreen' element={<LoadingScreen/>}/>
                     <Route path='/tasksScreen' element={<TasksScreen/>}/>
+                    <Route path='/miniGameScreen' element={<MiniGameScreen/>}/>
                 </Routes>
             </BrowserRouter>
         </>
