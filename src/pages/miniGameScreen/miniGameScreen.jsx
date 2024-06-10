@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './miniGameScreen.css';
 import {useTelegram} from "../../hooks/useTelegram";
 import {getUserData} from "../../httpRequests/dragonEggApi";
@@ -7,9 +7,7 @@ import sadBubble from "../../img/icons/sadbubble.png";
 import cryingHamster from "../../img/icons/cryingHamster.png";
 import bomb from "../../img/icons/bomb.png";
 import coldTime from "../../img/icons/coldTime.png";
-
 import storeTemplateData from '../../storeTemplateData/storeTemplateData.json'
-import ComingSoonModal from "../../components/modals/ComingSoonModal/ComingSoonModal";
 import {Link} from "react-router-dom";
 import useStore from "../../store/zustand.store/store";
 
@@ -17,7 +15,6 @@ import useStore from "../../store/zustand.store/store";
 export const MiniGameScreen = () => {
     const {user} = useTelegram();
     const userId = user?.id || '777217409'; //'409840876' ;
-    const [showModal, setShowModal] = useState(false);
 
     const [started, setStarted] = useState(false);
     const [bubbles, setBubbles] = useState([]);
@@ -26,27 +23,45 @@ export const MiniGameScreen = () => {
     const [timeLeft, setTimeLeft] = useState(20);
     const [gameOver, setGameOver] = useState(false);
     const [lastClickTime, setLastClickTime] = useState(Date.now());
+    const [frozen, setFrozen] = useState(false);
+    const [specialItems, setSpecialItems] = useState([]);
+    const bubbleTimers = useRef([]);
+    const specialItemTimers = useRef([]);
 
     useEffect(() => {
         if (started && timeLeft > 0) {
             const timer = setInterval(() => {
-                setTimeLeft((prevTime) => prevTime - 1);
+                if (!frozen) setTimeLeft((prevTime) => prevTime - 1);
             }, 1000);
             return () => clearInterval(timer);
         } else if (timeLeft === 0) {
             setGameOver(true);
             setStarted(false);
         }
-    }, [started, timeLeft]);
+    }, [started, timeLeft, frozen]);
+
+    useEffect(() => {
+        if (started) {
+            spawnBubble();
+            spawnSpecialItem();
+        }
+        return () => {
+            bubbleTimers.current.forEach(timer => clearTimeout(timer));
+            specialItemTimers.current.forEach(timer => clearTimeout(timer));
+            bubbleTimers.current = [];
+            specialItemTimers.current = [];
+        };
+    }, [started]);
 
     const startGame = () => {
         setStarted(true);
-        setTimeLeft(10);
+        setTimeLeft(12);
         setPoints(0);
         setBubbles([]);
         setHamsters([]);
+        setSpecialItems([]);
         setGameOver(false);
-        spawnBubble();
+        setFrozen(false);
     };
 
     const spawnBubble = () => {
@@ -54,12 +69,28 @@ export const MiniGameScreen = () => {
         for (let i = 0; i < bubbleCount; i++) {
             const bubble = {
                 id: Date.now() + i,
-                left: Math.random() * (window.innerWidth - 50),
+                left: Math.random() * (window.innerWidth - 80),
                 duration: Math.random() * 3 + 2,
             };
             setBubbles((prevBubbles) => [...prevBubbles, bubble]);
         }
-        setTimeout(spawnBubble, Math.random() * 1700);
+        const timer = setTimeout(spawnBubble, Math.random() * 400 + 100);
+        bubbleTimers.current.push(timer);
+    };
+
+    const spawnSpecialItem = () => {
+        const itemTypes = ['bomb', 'bomb', 'coldTime', 'bomb'];
+        const itemType = itemTypes[Math.floor(Math.random() * itemTypes.length)];
+        const duration = Math.random() * 2 + 2;
+        const item = {
+            id: Date.now(),
+            type: itemType,
+            left: Math.random() * (window.innerWidth - 80),
+            duration: duration,
+        };
+        setSpecialItems((prevItems) => [...prevItems, item]);
+        const timer = setTimeout(spawnSpecialItem, Math.random() * 5000 + 2000);
+        specialItemTimers.current.push(timer);
     };
 
     const handleBubbleClick = (id, top, left, duration) => {
@@ -70,12 +101,28 @@ export const MiniGameScreen = () => {
         const pointsToAdd = 1 + Math.floor(speedBonus) + Math.floor(durationBonus);
 
         setBubbles((prevBubbles) => prevBubbles.filter((bubble) => bubble.id !== id));
-        setHamsters((prevHamsters) => [
-            ...prevHamsters,
-            { id, top, left }
-        ]);
+        setHamsters((prevHamsters) => [...prevHamsters, { id, top, left }]);
         setPoints((prevPoints) => prevPoints + pointsToAdd);
         setLastClickTime(currentTime);
+    };
+
+    const handleBombClick = (id) => {
+        setSpecialItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        if (points >= 20) {
+            setPoints((prevPoints) => prevPoints - 20);
+            document.querySelector('.score').classList.add('red');
+            setTimeout(() => {
+                document.querySelector('.score').classList.remove('red');
+            }, 500);
+        }
+    };
+
+    const handleColdTimeClick = (id) => {
+        setSpecialItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        setFrozen(true);
+        setTimeout(() => {
+            setFrozen(false);
+        }, 4000);
     };
 
     const formatTime = (seconds) => {
@@ -181,8 +228,8 @@ export const MiniGameScreen = () => {
                                 <Link to={'/'} className={'mini-game-home-link'}>
                                     Home
                                 </Link>
-                                <p className="score">Points: {points}</p>
-                                <p className="timer">{formatTime(timeLeft)}</p>
+                                <p className={`score ${points < 0 ? 'red' : ''}`}>Points: {points}</p>
+                                <p className={`timer ${frozen ? 'frozen' : ''}`}>{formatTime(timeLeft)}</p>
                                 {bubbles.map((bubble) => (
                                     <div
                                         key={bubble.id}
@@ -204,6 +251,20 @@ export const MiniGameScreen = () => {
                                         style={{top: hamster.top, left: hamster.left}}
                                         alt="Crying Hamster"
                                     />
+                                ))}
+                                {specialItems.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="special-item"
+                                        style={{
+                                            left: item.left,
+                                            animationDuration: `${item.duration}s`,
+                                        }}
+                                        onClick={() => item.type === 'bomb' ? handleBombClick(item.id) : handleColdTimeClick(item.id)}
+                                    >
+                                        <img className="special-item-img" src={item.type === 'bomb' ? bomb : coldTime}
+                                             alt={item.type === 'bomb' ? 'Bomb' : 'Cold Time'}/>
+                                    </div>
                                 ))}
                             </>
                         )
