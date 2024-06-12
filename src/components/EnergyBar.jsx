@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import energyIcon from '../img/icons/energy.png';
 import miniGame from '../img/icons/miniGame.png';
-import storeTemplateData from "../storeTemplateData/storeTemplateData.json";
 import {Link} from "react-router-dom";
 
 const EnergyBar = ({userEnergy}) => {
@@ -11,9 +10,6 @@ const EnergyBar = ({userEnergy}) => {
     useEffect(() => {
         setEnergy(userEnergy)
     }, [userEnergy])
-
-
-
 
     return energy && (
         <div>

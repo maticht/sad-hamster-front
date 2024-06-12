@@ -51,12 +51,6 @@
 .products-scroll-block::-webkit-scrollbar {
     display: none;
 }
-.transformation-circle{
-    background-image: url('../../img/transformationCircle.png');
-    background-size: cover;
-    background-position: right 75px top -45px;
-    background-repeat: no-repeat;
-}
 .store-product-item{
     display: flex;
     width: calc(100% - 35px);

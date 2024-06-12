@@ -138,6 +138,7 @@
     }
 }
 .pedestal-overlay {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -157,8 +158,30 @@
     animation: float 2s ease-in-out infinite;
 }
 
-.pedestal-overlay img {
+.bubbleImg {
     width: 160px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+.sadHamsterVid {
+    width: 180px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -30px;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+.sadHamsterImg {
+    width: 90px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
 }
 /*.pedestal-overlay:active {*/
 /*    outline: none;*/

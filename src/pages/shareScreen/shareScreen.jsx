@@ -6,8 +6,6 @@ import NavBar from "../../components/navBar/navBar";
 import {collectFromInvitees, replenishmentFromInvitees} from "../../httpRequests/dragonEggApi";
 import scoreCoin from "../../img/icons/sadCoin.png";
 import {Link} from "react-router-dom";
-import helmet from "../../img/icons/profile.png";
-import torch from "../../img/icons/torch.png";
 import ComingSoonModal from "../../components/modals/ComingSoonModal/ComingSoonModal";
 import useStore from "../../store/zustand.store/store";
 

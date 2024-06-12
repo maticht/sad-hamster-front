@@ -1,35 +1,21 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react';
 import './mainScreen.css';
 import {useTelegram} from "../../hooks/useTelegram";
-import background from "../../img/background/midleagebg.png"
-import backgroundNight from "../../img/background/midleagebg_night.png"
-import pedestal from "../../img/pedestal.png";
-import pedestalNight from "../../img/pedestal_night.png"
 import {
-    collectWeeklyReward,
     getUserData,
-    setEggFlag,
     updateEnergyDate,
     updateScore
 } from "../../httpRequests/dragonEggApi";
-import {barrelExpectation, collectionBarrel} from "../../httpRequests/dragonEggApi";
 import NavBar from "../../components/navBar/navBar";
-import Space from "../../components/space/space";
-import helmet from "../../img/icons/profile.png";
 import scoreCoin from "../../img/icons/sadCoin.png";
-import torch from "../../img/icons/torch.png";
-import bubbleHamster from '../../img/icons/sadbubble.png'
-import soundOn from "../../img/sound/soundOn.png"
-import soundOff from "../../img/sound/soundOff.png"
-import calendar from "../../img/icons/calendar.png"
+import bubble from '../../img/icons/bubble.png';
+import sadHamsterImg from '../../img/icons/sadHamster.png'
+import sadHamsterVideo from '../../img/icons/sticker.webm'
 import {Link, useNavigate} from "react-router-dom";
 import ClickEffect from "../../animations/ClickOnEggAnimation";
 import ComingSoonModal from '../../components/modals/ComingSoonModal/ComingSoonModal';
-import NewEggModal from '../../components/modals/newEggModal/newEggModal';
-import DailyRewardModal from '../../components/modals/DailyRewardModal/DailyRewardModal';
 import storeTemplateData from "../../storeTemplateData/storeTemplateData.json";
 import EnergyBar from "../../components/EnergyBar";
-import WeeklyRewardModal from "../../components/modals/WeeklyRewardModal/WeeklyRewardModal";
 import useStore from "../../store/zustand.store/store";
 
 
@@ -46,9 +32,12 @@ export const HomeScreen = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [backgroundMusicIsPlaying, setBackgroundMusicIsPlaying] = useState();
+    const [sadScore, setSadScore] = useState(0);
+    const [level, setLevel] = useState(1);
+    const [showVideo, setShowVideo] = useState(false);
+    const [audio] = useState(new Audio("https://res.cloudinary.com/dfl7i5tm2/video/upload/v1718217975/LITTLE_COWBOY_-_READY_TO_GO_ORIGINAL_VERSION_mp3cut.net_nxkkxn.mp3"));
 
     const [countdown, setCountdown] = useState(null);
-    const expectedDate = new Date('1970-01-01T00:00:00.000+00:00');
 
     const [newEggModal, setNewEggModal] = useState(false);
     const [dailyRewardModal, setDailyRewardModal] = useState(false);
@@ -59,22 +48,6 @@ export const HomeScreen = () => {
 
     const [unclaimedReward, setUnclaimedReward] = useState();
     const [unclaimedRewardModal, setUnclaimedRewardModal] = useState(false);
-
-    //const [blockType, setBlockType] = useState("");
-    //const [score, setScore] = useState(0);
-    //const [overallScore, setOverallScore] = useState(0);
-    //const [eggScore, setEggScore] = useState(0);
-    //const [isEggOpen, setIsEggOpen] = useState(false);
-    //const [progress, setProgress] = useState(0);
-
-    // const [eggImageUrl, setEggImageUrl] = useState('');
-    //const [energy, setEnergy] = useState();
-    //const [axeData, setAxeData] = useState(storeTemplateData.storeItems.find(item => item.name === 'Axe'));
-    //const [axeDuration, setAxeDuration] = useState(axe?.timeOfUse[axe?.currentLevel - 1]);
-
-
-    //const [barrelCollectionTime, setBarrelCollectionTime] = useState(0);
-    //const [barrelLastEntrance, setBarrelLastEntrance] = useState(0);
 
 
     const navigate = useNavigate();
@@ -95,9 +68,6 @@ export const HomeScreen = () => {
     const updateBarrelStore = useStore((state) => state.updateBarrelStore);
     const setHammer = useStore((state) => state.setHammer);
 
-
-
-
     const {score, overallScore, eggScore, eggImage, isEggOpen, blockType, energy, barrel, barrelProgress, hammer, axe} =
         useStore((state) => ({
             score: state.score,
@@ -117,23 +87,10 @@ export const HomeScreen = () => {
         setShowModal(!showModal);
     };
 
-    const handleWeeklyRewardModalToggle = async () => {
-        setUnclaimedRewardModal(!unclaimedRewardModal);
-        const response = await collectWeeklyReward({userId, rewardId: unclaimedReward.id}).then((data) => {
-            if (data.success) {
-                setScore(score + unclaimedReward.rewardValue);
-                setOverallScore(overallScore + unclaimedReward.rewardValue)
-            }
-        });
-        setUnclaimedReward(null);
-    };
-
     const handleNewEggModalToggle = () => {
         setNewEggModal(!newEggModal);
     };
-    const handleDailyRewardModalToggle = () => {
-        setDailyRewardModal(!dailyRewardModal);
-    };
+
 
     useEffect(() => {
         if (userData && userData?.dailyReward) {
@@ -159,28 +116,6 @@ export const HomeScreen = () => {
         return () => clearInterval(timer);
     }, []);
 
-    useEffect(() => {
-        let timer;
-        if (axeButtonActive) {
-            const axeDuration = axe?.timeOfUse[axe?.currentLevel - 1];
-            timer = setInterval(() => {
-                setClickCounter(prevCounter => {
-                    const decrement = 100 / (axeDuration * 5);
-                    if (prevCounter > 0) {
-                        return prevCounter - decrement;
-                    } else {
-                        clearInterval(timer);
-                        setAxeButtonActive(false);
-                        return 0;
-                    }
-                });
-            }, 200);
-
-            return () => clearInterval(timer);
-        }
-    }, [axeButtonActive, axe?.timeOfUse]);
-
-
     const handleMultiTouchStart = (event) => {
         const touches = event.touches;
         const positions = {};
@@ -195,6 +130,21 @@ export const HomeScreen = () => {
         const touches = Array.from(event.changedTouches); // Преобразуем TouchList в массив
         console.log(touches)
         const endedTouches = [];
+
+        setSadScore(prevSadScore => {
+            const newSadScore = prevSadScore + 1;
+            if (newSadScore % 50 === 0) {
+                setLevel(prevLevel => prevLevel + 1);
+                setShowVideo(true);
+                audio.play();
+                setTimeout(() => {
+                    setShowVideo(false);
+                    audio.pause();
+                    audio.currentTime = 0;
+                }, 8000);
+            }
+            return newSadScore;
+        });
 
         // Получаем идентификаторы отпущенных касаний
         for (let i = 0; i < touches.length; i++) {
@@ -257,58 +207,6 @@ export const HomeScreen = () => {
     };
 
 
-    const activateAxeButton = () => {
-        setAxeButtonActive(true);
-    };
-
-    useEffect(() => {
-        if (userData && userData.eggs && userData.eggs.length > 0) {
-            const imageUrl = userData.eggs[0].stageScore.reduce((prevImageUrl, stageScore, index) => {
-                if (eggScore >= stageScore) {
-                    return userData.eggs[0].images.model1[index];
-                }
-                return prevImageUrl;
-            }, userData.eggs[0].images.model1[0]);
-            setEggImage(imageUrl);
-            if (isEggOpen === "") {
-                setIsEggOpen(userData.eggs[0]?.isOpen);
-            }
-        }
-    }, [eggScore, userData]);
-
-    const handleBarrelExpectation = async () => {
-        try {
-            const response = await barrelExpectation(userId);
-            setUserData(response.user);
-            updateBarrelStore('collectionTime', response.user.barrel.collectionTime);
-            //setBarrelCollectionTime(response.user.barrel.collectionTime);
-            updateBarrelStore('lastEntrance', response.user.barrel.lastEntrance)
-            //setBarrelLastEntrance(response.user.barrel.lastEntrance)
-            setScore(response.user.score);
-            setOverallScore(response.user.overallScore);
-            setEggScore(response.user.eggs[0].score);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const handleCollectionBarrel = async () => {
-        try {
-            const response = await collectionBarrel(userId);
-            if (response.success) {
-                setBarrelProgress(0);
-                //setBarrelCollectionTime(response.collectionTime);
-                updateBarrelStore('collectionTime', response.collectionTime);
-                //setBarrelLastEntrance(response.lastEntrance)
-                updateBarrelStore('lastEntrance', response.lastEntrance)
-                setScore(response.score);
-                setOverallScore(response.overallScore);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     const fetchUserData = useCallback(async () => {
         try {
             const response = await getUserData(userId);
@@ -319,32 +217,8 @@ export const HomeScreen = () => {
         }
     }, [userId]);
 
-    const handleCollectReward = useCallback(async () => {
-        try {
-            const user = await fetchUserData();
-            setUserData(user);
-            console.log('333333333');
-            setCollectReward(true)
-        } catch (error) {
-            console.error(error);
-        }
-    }, [fetchUserData]);
 
     useEffect(() => {
-        if (unclaimedReward) {
-            setUnclaimedRewardModal(true);
-        }
-    }, [unclaimedReward]);
-
-    useEffect(() => {
-
-        const audio = document.getElementById("backgroundMusic");
-
-        if (audio.paused) {
-            setBackgroundMusicIsPlaying(false);
-        } else {
-            setBackgroundMusicIsPlaying(true);
-        }
 
         const fetchUserDataAndDisplay = async () => {
             const user = await fetchUserData();
@@ -419,67 +293,6 @@ export const HomeScreen = () => {
     }, [userId, collectReward]);
 
 
-    useEffect(() => {
-        const currentHour = new Date().getHours();
-        if (currentHour >= 18 || currentHour < 6) {
-            setTheme('day');
-        } else {
-            setTheme('day');
-        }
-
-    }, []);
-
-    useEffect(() => {
-        let intervalId;
-
-        if (barrel.collectionTime) {
-            const updateCountdown = () => {
-                const collectionTime = new Date(barrel.collectionTime);
-                const now = new Date();
-                const difference = collectionTime.getTime() - now.getTime();
-
-                if (difference > 0) {
-                    const seconds = Math.floor((difference / 1000) % 60);
-                    const minutes = Math.floor((difference / (1000 * 60)) % 60);
-                    const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-                    setCountdown(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
-                } else {
-                    setCountdown('00:00:00');
-                    clearInterval(intervalId);
-                }
-            };
-
-            updateCountdown();
-            intervalId = setInterval(updateCountdown, 1000);
-        } else {
-            setCountdown('00:00:00');
-        }
-
-        return () => clearInterval(intervalId);
-    }, [barrel.collectionTime]);
-
-    useEffect(() => {
-        let intervalId;
-        if (barrel.collectionTime && barrel.lastEntrance) {
-            const collectionTime = new Date(barrel.collectionTime);
-            const lastEntrance = new Date(barrel.lastEntrance);
-            const now = new Date();
-            const totalTime = collectionTime - lastEntrance;
-            const elapsedTime = now - lastEntrance;
-            const currentProgress = (elapsedTime / totalTime) * 100;
-            setBarrelProgress(currentProgress);
-            console.log((elapsedTime / totalTime) * 100);
-            intervalId = setInterval(() => {
-                const now = new Date();
-                const elapsedTime = now - lastEntrance;
-                const currentProgress = (elapsedTime / totalTime) * 100;
-                setBarrelProgress(currentProgress);
-            }, 1000);
-        }
-
-        return () => clearInterval(intervalId);
-    }, [userData, barrel.collectionTime]);
-
     const sendScoreToServer = async () => {
         try {
             await updateScore({userId, score, eggScore, overallScore}).then((data) => {
@@ -538,20 +351,6 @@ export const HomeScreen = () => {
         return () => clearTimeout(timer);
     }, [score]);
 
-    const toggleMusic = () => {
-        const audio = document.getElementById("backgroundMusic");
-        if (backgroundMusicIsPlaying) {
-            setBackgroundMusicIsPlaying(false);
-            if (audio) {
-                audio.pause()
-            }
-        } else if (!backgroundMusicIsPlaying) {
-            setBackgroundMusicIsPlaying(true);
-            if (audio) {
-                audio.play()
-            }
-        }
-    }
 
     const handleSetBlockType = useMemo(() => {
         return (type) => {
@@ -560,171 +359,45 @@ export const HomeScreen = () => {
     }, []);
 
 
-    useEffect(() => {
-        if (userData && userData?.narrativeScenes) {
-            if (eggScore) {
-                if (eggScore >= 88) {
-                    console.log(userData)
-                    if (!userData?.narrativeScenes?.gettingEgg) {
-                        sendScoreToServer().then(data => {
-                        });
-                        sendEnergyToServer().then(data => {
-                        });
-                        navigate('/gettingEggScene');
-                    }
-                    handleSetBlockType('overlay');
-                    console.log("Счет достиг 88!");
-                } else {
-                    if (blockType !== "space" && blockType !== "") {
-                        handleSetBlockType('space');
-                    }
-                }
-            }
-        }
-    }, [userData, eggScore, handleSetBlockType]);
-
-    useEffect(() => {
-        if (userData) {
-            if (eggScore === 88) {
-                if (userData.eggs && userData.eggs[0].isModalShown === false) {
-                    handleNewEggModalToggle();
-                }
-            }
-        }
-    }, [eggScore, userData]);
-
     return (
-        <div className="App"
-             // style={{backgroundImage: theme === 'day' ? `url(${background})` : `url(${backgroundNight})`}}
-        >
-            {/*{eggScore >= 88 && showOverlay && (*/}
-            {/*    <div className={`white-overlay`}>*/}
-            {/*        <img src={smokeAnimation} alt="Smoke Animation"/>*/}
-            {/*    </div>*/}
-            {/*)}*/}
+        <div className="App">
             <div className="counter-container">
                 <header className="header-main-container">
                     <div className={'headerHomeBlock'}>
                         <div className="header-container">
-                            {/*<Link to={'/profile'} className={'headerLightLink'}>*/}
-                            {/*    <img src={helmet} alt={"logo"}/>*/}
-                            {/*</Link>*/}
-                            <div className={'headerScoreBlock'}>
-                                <div className={'headerScoreText'}>
-                                    <img src={scoreCoin}></img>
-                                    <p>{score}</p>
+                            <div className='headerScoreBlock'>
+                                <div className='headerScoreText'>
+                                    <img src={scoreCoin} alt="scoreCoin"/>
+                                    <p>{sadScore}</p>
                                 </div>
                             </div>
-                            <p className={'lvlText'}>lvl 12</p>
+                            <p className='lvlText'>lvl {level}</p>
                             <div className="lvl-progress-container">
-                                <div className={'lvl-progress-bar'}>
-                                    <div className={'lvl-progress-line'}
-                                         style={{width: `${(energy.value * 100) / energy.energyCapacity[energy.currentLevel - 1]}%`}}
-                                    ></div>
+                                <div className='lvl-progress-bar'>
+                                    <div className='lvl-progress-line' style={{width: `${(sadScore % 50) * 2}%`}}></div>
                                 </div>
                             </div>
-                            {/*<div className={'headerLink'} onClick={handleModalToggle}>*/}
-                            {/*    <img src={torch} alt={"logo"}/>*/}
-                            {/*</div>*/}
                         </div>
                     </div>
                     {showModal && <ComingSoonModal onClose={handleModalToggle}/>}
-                    {/*{newEggModal && <NewEggModal onClose={handleNewEggModalToggle}/>}*/}
-                    {/*{dailyRewardModal && !unclaimedReward && <DailyRewardModal onClose={() => {*/}
-                    {/*    handleDailyRewardModalToggle()*/}
-                    {/*}} onCollectReward={handleCollectReward}/>}*/}
-                    {/*{unclaimedReward &&*/}
-                    {/*    <WeeklyRewardModal userData={userData} unclaimedReward={unclaimedReward} onClose={() => {*/}
-                    {/*        handleWeeklyRewardModalToggle()*/}
-                    {/*    }}/>}*/}
-                    {/*<div className={'filling-barrel-container'}>*/}
-                    {/*    <img className={'filling-barrel-img'}*/}
-                    {/*         src={barrel?.images[barrel?.currentLevel - 1]} alt={'barrel'}/>*/}
-                    {/*    <div className={'filling-barrel-info'}>*/}
-                    {/*        <div className={'barrel-progress-bar'}>*/}
-                    {/*            <div className={'barrel-progress-line'} style={{width: `${barrelProgress}%`}}></div>*/}
-                    {/*            <span></span>*/}
-                    {/*            <span></span>*/}
-                    {/*            <span></span>*/}
-                    {/*            <span></span>*/}
-                    {/*            <span></span>*/}
-                    {/*            <span></span>*/}
-                    {/*            <span></span>*/}
-                    {/*        </div>*/}
-                    {/*        <div className={'filling-barrel-footer'}>*/}
-                    {/*            <div className={'barrel-end-time'}>*/}
-                    {/*                <p>Time left:</p>*/}
-                    {/*                {new Date(barrel.lastEntrance).getTime() === expectedDate.getTime() ? (*/}
-                    {/*                    <b>00:00:00</b>*/}
-                    {/*                ) : (*/}
-                    {/*                    <b>{countdown}</b>*/}
-                    {/*                )}*/}
-                    {/*            </div>*/}
-                    {/*            {new Date(barrel.lastEntrance).getTime() === expectedDate.getTime() ? (*/}
-                    {/*                <button className={'barrel-collect-btn'} onClick={handleBarrelExpectation}>*/}
-                    {/*                    <p>Start!</p>*/}
-                    {/*                </button>*/}
-                    {/*            ) : (*/}
-                    {/*                <button*/}
-                    {/*                    className={`barrel-collect-btn ${countdown !== '00:00:00' ? 'disabled' : ''}`}*/}
-                    {/*                    onClick={handleCollectionBarrel}>*/}
-                    {/*                    <p>Collect</p>*/}
-                    {/*                    <div>*/}
-                    {/*                        <b>{barrel?.income[barrel?.currentLevel - 1]}</b>*/}
-                    {/*                        <img src={scoreCoin}></img>*/}
-                    {/*                    </div>*/}
-                    {/*                </button>*/}
-                    {/*            )}*/}
-
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-                    {/*<div className={'additionalButtonsBlock'}>*/}
-                    {/*    <div>*/}
-                    {/*        <div className={'homeReward'} onClick={handleDailyRewardModalToggle}>*/}
-                    {/*            <img src={calendar} alt={"logo"}/>*/}
-                    {/*        </div>*/}
-                    {/*        <div className="sound-container">*/}
-                    {/*            <div className="sound-block" onClick={toggleMusic}>*/}
-                    {/*                <div className="sound-image-container">*/}
-                    {/*                    {backgroundMusicIsPlaying === true ?*/}
-                    {/*                        <img src={soundOn}/>*/}
-                    {/*                        : backgroundMusicIsPlaying === false &&*/}
-                    {/*                        <img src={soundOff}/>*/}
-                    {/*                    }*/}
-                    {/*                </div>*/}
-                    {/*            </div>*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*    <div disabled={axeButtonActive || clickCounter < 100} onClick={activateAxeButton}>*/}
-                    {/*        <button*/}
-                    {/*            disabled={axeButtonActive || clickCounter < 100}*/}
-                    {/*            className={`axeToggle ${clickCounter > 100 && 'axeToggleActive'}`}*/}
-                    {/*        >*/}
-                    {/*            <img src={axe?.images[axe?.currentLevel - 1]} alt="logo"/>*/}
-                    {/*            <div className={`axe-progress-line`} style={{height: `${clickCounter}%`}}></div>*/}
-                    {/*        </button>*/}
-                    {/*        {clickCounter > 100 && (*/}
-                    {/*            <p className={'axeToggleActiveText'}>Tap<br/>to use!</p>*/}
-                    {/*        )}*/}
-                    {/*    </div>*/}
-                    {/*</div>*/}
-
                 </header>
                 <div className="clickable-area"
                      onTouchStart={handleMultiTouchStart}
                      onTouchEnd={handleMultiTouchEnd}
                      onTouchMove={(e) => e.preventDefault()}
                 >
-
                 </div>
                 <div className="pedestal-container">
                     <button className="pedestal-overlay"
                             onTouchStart={handleMultiTouchStart}
                             onTouchEnd={handleMultiTouchEnd}
-                            onTouchMove={(e) => e.preventDefault()}
-                    >
-                        <img src={bubbleHamster} alt="bubbleHamster"/>
+                            onTouchMove={(e) => e.preventDefault()}>
+                        <img src={bubble} alt="bubbleHamster" className="bubbleImg"/>
+                        {showVideo ? (
+                            <video src={sadHamsterVideo} autoPlay loop muted className="sadHamsterVid"/>
+                        ) : (
+                            <img src={sadHamsterImg} alt="sadHamster" className="sadHamsterImg"/>
+                        )}
                     </button>
 
                     {clickEffects}

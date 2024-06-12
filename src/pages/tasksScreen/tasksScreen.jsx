@@ -7,22 +7,12 @@ import {updateHummer} from "../../httpRequests/dragonEggApi";
 import {updateBarrel} from "../../httpRequests/dragonEggApi";
 import {updateEnergyBottle} from "../../httpRequests/dragonEggApi";
 import scoreCoin from "../../img/icons/sadCoin.png";
-import torch from "../../img/icons/torch.png";
 import storeTemplateData from '../../storeTemplateData/storeTemplateData.json'
 import ComingSoonModal from "../../components/modals/ComingSoonModal/ComingSoonModal";
-import {Link} from "react-router-dom";
-import Header from "../../components/header/header";
-import helmet from "../../img/icons/profile.png";
 import useStore from "../../store/zustand.store/store";
 
 
 export const TasksScreen = () => {
-
-    //const [userData, setUserData] = useState({});
-    //const [axeData, setAxeData] = useState(storeTemplateData.storeItems.find(item => item.name === 'Axe'));
-    //const [barrelData, setBarrelData] = useState(storeTemplateData.storeItems.find(item => item.name === 'Barrel'));
-    //const [hammerData, setHammerData] = useState(storeTemplateData.storeItems.find(item => item.name === 'Hammer'));
-    //const [energyBottleData, setEnergyBottleData] = useState(storeTemplateData.storeItems.find(item => item.name === 'Energy Bottle'));
     const [isPurchaseError, setIsPurchaseError] = useState({
         axe: false,
         hammer: false,
@@ -213,9 +203,6 @@ export const TasksScreen = () => {
                 <div className={'products-store-block'}>
                     <div className={'headerStoreBlock'}>
                         <div className="header-container">
-                            {/*<Link to={'/profile'} className={'headerLightLink'}>*/}
-                            {/*    <img src={helmet} alt={"logo"}/>*/}
-                            {/*</Link>*/}
                             <div className={'headerScoreBlock'}>
                                 <div className={'headerScoreText'}>
                                     <img src={scoreCoin}></img>
@@ -230,93 +217,10 @@ export const TasksScreen = () => {
                                     ></div>
                                 </div>
                             </div>
-                            {/*<div className={'headerLink'} onClick={handleModalToggle}>*/}
-                            {/*    <img src={torch} alt={"logo"}/>*/}
-                            {/*</div>*/}
                         </div>
                     </div>
                     {showModal && <ComingSoonModal onClose={handleModalToggle}/>}
                     <div className="products-scroll-block">
-                        {/*{eggs && eggs.length > 0 && isEggOpen && (*/}
-                        {/*    <div className={'store-product-item transformation-circle'}>*/}
-                        {/*        <div className={'store-product-item-info'}>*/}
-                        {/*            <div className={'store-product-item-info-block'}>*/}
-                        {/*                <div>*/}
-                        {/*                    <b className={'store-product-item-info-title'}>Alchemist</b>*/}
-                        {/*                    <p className={'store-product-item-description'}>Alchemist makes it possible*/}
-                        {/*                        to*/}
-                        {/*                        improve the rarity of an egg, increasing the chances of getting into a*/}
-                        {/*                        rarer*/}
-                        {/*                        WL</p>*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-                        {/*        <div className={'store-product-item-upgrade-block'}>*/}
-                        {/*            <div>*/}
-                        {/*            </div>*/}
-                        {/*            <Link to={'/alchemist'} className={'upgrade-alchemist-btn'}>*/}
-                        {/*                <p>Open</p>*/}
-                        {/*            </Link>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
-                        {/*<div className={'store-product-item'}>*/}
-                        {/*    <div className={'store-product-item-info'}>*/}
-                        {/*        <div className={'store-product-item-info-block'}>*/}
-                        {/*            <div>*/}
-                        {/*                <b className={'store-product-item-info-title'}>{barrel?.name}</b>*/}
-                        {/*                <p className={'store-product-item-description'}>{barrel?.description}</p>*/}
-                        {/*            </div>*/}
-                        {/*            <img className={'store-product-item-img'}*/}
-                        {/*                 src={barrel.images[barrel?.currentLevel - 1]}*/}
-                        {/*                 alt={'barrel'}/>*/}
-                        {/*        </div>*/}
-
-                        {/*    </div>*/}
-                        {/*    <div className={'store-product-item-upgrade-block'}>*/}
-                        {/*        <div>*/}
-                        {/*            <div>*/}
-                        {/*                <div>*/}
-                        {/*                    {barrel?.currentLevel === 8 ? (*/}
-                        {/*                        <div>*/}
-                        {/*                        Income: <b>{barrel.income[barrel?.currentLevel - 1]}</b>*/}
-                        {/*                    </div>*/}
-                        {/*                ) : (*/}
-                        {/*                        <div>*/}
-                        {/*                            Income:  <b>{barrel.income[barrel?.currentLevel - 1]}</b> {'⇾ '}*/}
-                        {/*                            <b>{barrel.income[barrel?.currentLevel]}</b>*/}
-                        {/*                        </div>*/}
-                        {/*                    )}*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*            <div>*/}
-                        {/*                <div>*/}
-                        {/*                    {barrel?.currentLevel === 8 ? (*/}
-                        {/*                        <div>*/}
-                        {/*                            Time: <b>{barrel?.waitingTime[barrel?.currentLevel - 1]}h</b>*/}
-                        {/*                        </div>*/}
-                        {/*                        ) : (*/}
-                        {/*                        <div>*/}
-                        {/*                            Time:  <b>{barrel?.waitingTime[barrel?.currentLevel - 1]}h</b> {'⇾ '}*/}
-                        {/*                            <b>{barrel?.waitingTime[barrel?.currentLevel]}h</b>*/}
-                        {/*                        </div>*/}
-                        {/*                    )}*/}
-                        {/*                </div>*/}
-                        {/*            </div>*/}
-                        {/*        </div>*/}
-
-                        {/*        <div className={'upgrade-btn' + (isPurchaseError.barrel ? ' error' : '')} onClick={handleBarrelUpgrade}>*/}
-                        {/*            {barrel?.currentLevel === 8 ? (*/}
-                        {/*                <p>MAX lvl</p>*/}
-                        {/*            ) : (*/}
-                        {/*                <div className={'store-product-upgrade-nums'}>*/}
-                        {/*                    <p>{barrel.price[barrel?.currentLevel - 1]}</p>*/}
-                        {/*                    <img src={scoreCoin}></img>*/}
-                        {/*                </div>*/}
-                        {/*            )}*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
                         <div className={'store-product-item'}>
                             <div className={'store-product-item-upgrade-block'}>
                                 <div>
