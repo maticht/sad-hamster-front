@@ -1,20 +1,25 @@
 import {$host} from "./index";
 
-
 export const getUserData = async (userid) => {
-    const {data} = await $host.get('/getUserData/' + userid)
+    const {data} = await $host.get('/api/user/' + userid)
     return data
 }
-export const checkDailyRewards = async (userid) => {
-    const {data} = await $host.get('/checkDailyRewards/' + userid)
+
+export const getAllUsers = async () => {
+    const {data} = await $host.get('/api/user/all')
     return data
 }
-export const setEggFlag = async (userid) => {
-    const {data} = await $host.get('/api/eggs/' + userid)
-    return data
+export const getUserTopPlace = async (userId) => {
+    const {data} = await $host.put('/api/user/topPlace/' + userId);
+    return data;
 }
+export const getMiniGameReward = async (userId, body) => {
+    const {data} = await $host.post('/api/user/miniGame/' + userId, body);
+    return data;
+}
+
 export const updateScore = async (value) => {
-    const {data} = await $host.patch('/api/score', value);
+    const {data} = await $host.patch('/api/user/updateScore', value);
     return data;
 }
 
@@ -23,69 +28,35 @@ export const updateEnergyDate = async (value) => {
     return data;
 }
 
-export const updateEnergyBottle = async (userId) => {
-    const {data} = await $host.get('/api/energy/updateBottle/'+userId);
+export const updateEnergyCapacity = async (userId) => {
+    const {data} = await $host.patch('/api/energy/updateCapacity/'+userId);
     return data;
 }
 
-export const updateAxe = async (userid) => {
-    const {data} = await $host.put('/updateAxe/' + userid);
-    return data;
-}
-export const updateHummer = async (userid) => {
-    const {data} = await $host.put('/updateHummer/' + userid);
-    return data;
-}
-export const updateBarrel = async (userid) => {
-    const {data} = await $host.put('/updateBarrel/' + userid);
-    return data;
-}
-export const alchemistUpgrade = async (userid) => {
-    const {data} = await $host.put('/alchemistUpgrade/' + userid);
-    return data;
-}
-export const barrelExpectation = async (userid) => {
-    const {data} = await $host.put('/barrelExpectation/' + userid);
-    return data;
-}
-export const collectionBarrel = async (userid) => {
-    const {data} = await $host.put('/collectionBarrel/' + userid);
-    return data;
-}
-export const getAllUsers = async () => {
-    const {data} = await $host.get('/getAllUsers')
-    return data
-}
-export const collectDailyReward = async (userid) => {
-    const {data} = await $host.put('/collectDailyReward/' + userid);
+export const updateEnergyRecovery = async (userId) => {
+    const {data} = await $host.patch('/api/energy/updateRecovery/'+userId);
     return data;
 }
 
-export const collectWeeklyReward = async (value) => {
-    const {data} = await $host.post('/api/weeklyRewards', value);
+export const collectFromInvitees = async (userId) => {
+    const {data} = await $host.put('/api/referralUsers/collectFromInvitees/' + userId);
     return data;
 }
-export const collectFromInvitees = async (userid) => {
-    const {data} = await $host.put('/collectFromInvitees/' + userid);
+export const replenishmentFromInvitees = async (userId) => {
+    const {data} = await $host.put('/api/referralUsers/replenishmentFromInvitees/' + userId);
     return data;
 }
-export const replenishmentFromInvitees = async (userid) => {
-    const {data} = await $host.put('/replenishmentFromInvitees/' + userid);
+
+export const getTasks = async (userId) => {
+    const {data} = await $host.get('/api/task/' + userId);
     return data;
 }
-export const faultAppearanceScene = async (userid) => {
-    const {data} = await $host.put('/faultAppearanceScene/' + userid);
+export const completeTask = async (userId, body) => {
+    const {data} = await $host.put('/api/task/' + userId, body);
     return data;
 }
-export const gettingEggScene = async (userid) => {
-    const {data} = await $host.put('/gettingEggScene/' + userid);
+
+export const updateDamage = async (userId) => {
+    const {data} = await $host.patch('/api/damage/' + userId);
     return data;
 }
-export const getUserTopPlace = async (userid) => {
-    const {data} = await $host.put('/getUserTopPlace/' + userid);
-    return data;
-}
-export const updateWalletHash = async (userid, auroraWalletHash) => {
-    const { data } = await $host.put(`/updateWalletHash/${userid}`, { auroraWalletHash });
-    return data;
-};

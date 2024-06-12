@@ -18,52 +18,26 @@ export const LoadingScreen = () => {
     const navigate = useNavigate();
 
     const setUsername = useStore((state) => state.setUsername);
-    const setUserLeague = useStore((state) => state.setUserLeague);
     const setUserPlaceInTop = useStore((state) => state.setUserPlaceInTop);
+    const setDamage = useStore((state) => state.setDamage);
     const setScore = useStore((state) => state.setScore);
     const setOverallScore = useStore((state) => state.setOverallScore);
     const setEnergy = useStore((state) => state.setEnergy);
-    const setBarrel = useStore((state) => state.setBarrel);
-    const setBarrelProgress = useStore((state) => state.setBarrelProgress);
-    const setHammer = useStore((state) => state.setHammer);
-    const setEggs = useStore((state) => state.setEggs);
-    const setEggImage = useStore((state) => state.setEggImage);
-    const setMainEggImage = useStore((state) => state.setMainEggImage);
-    const setEggRarity = useStore((state) => state.setEggRarity);
-    const setEggName = useStore((state) => state.setEggName);
-    const setIsEggOpen = useStore((state) => state.setIsEggOpen);
-    const setEggScore = useStore((state) => state.setEggScore);
-    const setBlockType = useStore((state) => state.setBlockType);
-    const updateAxeStore = useStore((state) => state.updateAxeStore);
     const setReferralUsers = useStore((state) => state.setReferralUsers);
     const setReferralCollectionTime = useStore((state) => state.setReferralCollectionTime);
-
 
     const fetchUserData = async () => {
         const response = await getUserData(userId);
         return response.user;
     };
 
-    const rewards = [
-        {placeInTop: [1, 3], league: 'Diamond'},
-        {placeInTop: [4, 10], league: 'Golden'},
-        {placeInTop: [11, 20], league: 'Silver'},
-        {placeInTop: [21, 50], league: 'Bronze'},
-        {placeInTop: [51, 100], league: 'Stone'},
-    ];
 
     useEffect(() => {
         const fetchUserDataAndDisplay = async () => {
             const user = await fetchUserData();
             setUserData(user);
             setUsername(user.username);
-            if (user.userTopPlace <= rewards[rewards.length - 1].placeInTop[1] && user.userTopPlace > 0) {
-                const reward = rewards.find(r =>
-                    user.userTopPlace >= r.placeInTop[0] && user.userTopPlace <= r.placeInTop[1]
-                );
-                console.log(reward)
-                setUserLeague(reward.league);
-            }
+
             setUserPlaceInTop(user.placeInTop);
 
             setScore(user.score);
@@ -90,38 +64,7 @@ export const LoadingScreen = () => {
                 energyValue = usersEnergyObj.energyCapacity[usersEnergyObj.currentLevel - 1] - energyNotRestored;
             }
             usersEnergyObj.value = energyValue;
-
             setEnergy(usersEnergyObj);
-            updateAxeStore('currentLevel', user.axe.currentLevel);
-            setBarrel(user.barrel);
-            const collectionTime = new Date(user.barrel.collectionTime);
-            const lastEntrance = new Date(user.barrel.lastEntrance);
-            now = new Date();
-            const totalTime = collectionTime - lastEntrance;
-            const elapsedTime = now - lastEntrance;
-            const currentProgress = (elapsedTime / totalTime) * 100;
-            setBarrelProgress(currentProgress);
-
-            setHammer(user.hammer);
-            setEggs(user.eggs);
-            console.log(user.eggs)
-            const imageUrl = user.eggs[0].stageScore.reduce((prevImageUrl, stageScore, index) => {
-                if (user.eggs[0].score >= stageScore) {
-                    return user.eggs[0].images.model1[index];
-                }
-                return prevImageUrl;
-            }, user.eggs[0].images.model1[0]);
-            setMainEggImage(user.eggs[0].images.model1[0]);
-            setEggRarity(user.eggs[0].rarity);
-            setEggName(user.eggs[0].name);
-            if (user.eggs[0].score >= 88) {
-                setBlockType('overlay');
-            } else {
-                setBlockType('space');
-            }
-            setEggImage(imageUrl);
-            setIsEggOpen(user.eggs[0]?.isOpen);
-            setEggScore(user.eggs[0].score);
         }
 
         if (userId) {

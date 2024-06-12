@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const $host = axios.create({
-    baseURL: 'https://backend.dragoneggs.net.pl/'
+    baseURL: 'http://localhost:8002/'
 })
 // https://backend.dragoneggs.net.pl/
 // http://test.server195361.nazwa.pl/
