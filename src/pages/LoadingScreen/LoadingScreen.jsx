@@ -7,6 +7,9 @@ import {getUserData} from "../../httpRequests/dragonEggApi";
 import {useNavigate} from 'react-router-dom';
 import useStore from "../../store/zustand.store/store";
 
+const balance = require("../../storeTemplateData/balanceData.json");
+
+
 export const LoadingScreen = () => {
     const [showTapMessage, setShowTapMessage] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -35,19 +38,27 @@ export const LoadingScreen = () => {
     useEffect(() => {
         const fetchUserDataAndDisplay = async () => {
             const user = await fetchUserData();
+            console.log(user)
             setUserData(user);
             setUsername(user.username);
 
             setUserPlaceInTop(user.placeInTop);
 
-            setScore(user.score);
-            setOverallScore(user.overallScore);
+            setScore(user.scores.score);
+            setOverallScore(user.scores.overallScore);
+
+            setDamage(user.damageLevel);
 
             setReferralUsers(user.referralUsers);
-            setReferralCollectionTime(user.referralCollectionTime);
+            setReferralCollectionTime(user.referralUsers.referralCollectionTime);
 
-            const usersEnergyObj = user.energy;
+            const usersEnergyObj = user.energy.energy;
+            const energyCapacityData = balance.energy.energyCapacity;
+            const energyRecoveryData = balance.energy.energyRecovery;
+            let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
+            let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
             const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
+
             let now = new Date();
             const diffTime = now.getTime() - fullEnergyTime.getTime();
 
@@ -55,13 +66,13 @@ export const LoadingScreen = () => {
 
             let energyValue;
             if (diffTime >= 0) {
-                energyValue = usersEnergyObj.energyCapacity[usersEnergyObj.currentLevel - 1];
+                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
             } else {
-                const energyRestoredPerSecond = usersEnergyObj.energyRecovery[usersEnergyObj.currentLevel - 1];
+                const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
                 const timeSinceLastUpdate = Math.abs(diffTime);
                 const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
                 const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
-                energyValue = usersEnergyObj.energyCapacity[usersEnergyObj.currentLevel - 1] - energyNotRestored;
+                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
             }
             usersEnergyObj.value = energyValue;
             setEnergy(usersEnergyObj);
@@ -135,11 +146,9 @@ export const LoadingScreen = () => {
     const handleLoadingScreenClick = () => {
 
         if (showTapMessage) {
-            if (!userData?.narrativeScenes?.faultAppearance) {
-                navigate('/faultAppearanceScene');
-            } else {
-                navigate('/');
-            }
+
+            navigate('/');
+
         }
 
         const audio = document.getElementById("backgroundMusic");

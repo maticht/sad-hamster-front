@@ -1,0 +1,25 @@
+{
+  "levels": [1000, 3000, 7000, 12000, 20000, 40000, 70000, 200000, 450000, 1000000, 2000000, 5000000, 10000000],
+  "damage": {
+    "name": "Damage",
+    "description": "Increases damage level",
+    "price": [100, 500, 10000, 100000, 500000, 1000000],
+    "strength": [1, 2, 3, 4, 5, 6, 7, 8],
+    "income": [1, 2, 3, 4, 5, 6, 7, 8],
+    "levels": [1, 2, 3, 4, 5, 6, 7, 8]
+  },
+  "energy": {
+    "energyCapacity": {
+      "name": "Energy capacity",
+      "description": "Increases energy capacity level",
+      "price": [2000, 5000, 40000, 150000, 400000],
+      "capacity": [500, 2500, 5000, 20000, 50000]
+    },
+    "energyRecovery": {
+      "name": "Energy recovery",
+      "description": "Increases energy recovery level",
+      "price": [2000, 5000, 40000, 150000, 400000],
+      "recovery": [1, 2, 3, 6, 8]
+    }
+  }
+}

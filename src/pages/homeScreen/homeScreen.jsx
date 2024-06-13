@@ -9,10 +9,18 @@ import {
 import NavBar from "../../components/navBar/navBar";
 import scoreCoin from "../../img/icons/sadCoin.png";
 import bubbleHamster from '../../img/icons/sadbubble.png'
+import bubble from '../../img/icons/bubble.png';
+import sadHamsterImg from '../../img/icons/sadHamster.png'
+import sadHamsterVideo from '../../img/icons/sticker.webm'
+import {Link, useNavigate} from "react-router-dom";
 import ClickEffect from "../../animations/ClickOnEggAnimation";
 import ComingSoonModal from '../../components/modals/ComingSoonModal/ComingSoonModal';
+import storeTemplateData from "../../storeTemplateData/storeTemplateData.json";
 import EnergyBar from "../../components/EnergyBar";
 import useStore from "../../store/zustand.store/store";
+
+const balance = require("../../storeTemplateData/balanceData.json");
+
 
 
 export const HomeScreen = () => {
@@ -25,6 +33,12 @@ export const HomeScreen = () => {
 
     const [dataLoaded, setDataLoaded] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [backgroundMusicIsPlaying, setBackgroundMusicIsPlaying] = useState();
+    const [level, setLevel] = useState(1);
+    const [showVideo, setShowVideo] = useState(false);
+    const [audio] = useState(new Audio("https://res.cloudinary.com/dfl7i5tm2/video/upload/v1718217975/LITTLE_COWBOY_-_READY_TO_GO_ORIGINAL_VERSION_mp3cut.net_nxkkxn.mp3"));
+
+    const [countdown, setCountdown] = useState(null);
 
 
     //STORE
@@ -47,6 +61,8 @@ export const HomeScreen = () => {
         setShowModal(!showModal);
     };
 
+
+
     const handleMultiTouchStart = (event) => {
         const touches = event.touches;
         const positions = {};
@@ -61,6 +77,7 @@ export const HomeScreen = () => {
         const touches = Array.from(event.changedTouches); // Преобразуем TouchList в массив
         console.log(touches)
         const endedTouches = [];
+
 
         // Получаем идентификаторы отпущенных касаний
         for (let i = 0; i < touches.length; i++) {
@@ -80,7 +97,18 @@ export const HomeScreen = () => {
             if (distance <= clickThreshold) {
                 if (energy.value >= scoreToAdd) {
                     handleDecreaseEnergy(scoreToAdd);
-                    setScore(score + axeScoreToAdd);
+                    const newScore = score + axeScoreToAdd;
+                    if (newScore % 50 === 0) {
+                        setLevel(prevLevel => prevLevel + 1);
+                        setShowVideo(true);
+                        audio.play();
+                        setTimeout(() => {
+                            setShowVideo(false);
+                            audio.pause();
+                            audio.currentTime = 0;
+                        }, 8000);
+                    }
+                    setScore(newScore);
                     setOverallScore(overallScore + scoreToAdd)
                 } else {
                     return;
@@ -91,7 +119,7 @@ export const HomeScreen = () => {
                         key={Date.now()}
                         x={touch.clientX}
                         y={touch.clientY - 50}
-
+                        damage={damage}
                     />
                 );
             }
@@ -118,32 +146,40 @@ export const HomeScreen = () => {
             const user = await fetchUserData();
             setUserData(user);
 
-            const usersEnergyObj = user.energy;
+            if(!damage){
+                setDamage(user.damageLevel);
+            }
+
+            const usersEnergyObj = user.energy.energy;
+            const energyCapacityData = balance.energy.energyCapacity;
+            const energyRecoveryData = balance.energy.energyRecovery;
+            let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
+            let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
             const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
-            const now = new Date();
+
+            let now = new Date();
             const diffTime = now.getTime() - fullEnergyTime.getTime();
 
             console.log("diffTime", diffTime / 1000)
 
             let energyValue;
             if (diffTime >= 0) {
-                energyValue = usersEnergyObj.energyCapacity[usersEnergyObj.currentLevel - 1];
+                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
             } else {
-                const energyRestoredPerSecond = usersEnergyObj.energyRecovery[usersEnergyObj.currentLevel - 1];
+                const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
                 const timeSinceLastUpdate = Math.abs(diffTime);
                 const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
                 const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
-                energyValue = usersEnergyObj.energyCapacity[usersEnergyObj.currentLevel - 1] - energyNotRestored;
+                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
             }
             usersEnergyObj.value = energyValue;
+            setEnergy(usersEnergyObj);
 
-            console.log(usersEnergyObj)
-            setEnergy(usersEnergyObj);//TODO
             if (!score) {
-                setScore(user.score);
+                setScore(user.scores.score);
             }
             if (!overallScore) {
-                setOverallScore(user.overallScore);
+                setOverallScore(user.scores.overallScore);
             }
             setDataLoaded(true);
         };
@@ -157,7 +193,7 @@ export const HomeScreen = () => {
 
     const sendScoreToServer = async () => {
         try {
-            await updateScore({userId, score, eggScore, overallScore}).then((data) => {
+            await updateScore({userId, score, overallScore}).then((data) => {
                 console.log(data)
             });
         } catch (error) {
@@ -169,9 +205,12 @@ export const HomeScreen = () => {
     useEffect(() => {
         if (energy) {
             const interval = setInterval(() => {
-                // Используем getState() для получения текущего значения энергии
                 const currentEnergy = useStore.getState().energy;
-                const newEnergyValue = Math.min(currentEnergy.value + currentEnergy.energyRecovery[currentEnergy.currentLevel - 1], currentEnergy.energyCapacity[currentEnergy.currentLevel - 1]);
+                const energyCapacityData = balance.energy.energyCapacity;
+                const energyRecoveryData = balance.energy.energyRecovery;
+                let currentRecoveryLevel = currentEnergy.energyRecoveryLevel;
+                let currentCapacityLevel = currentEnergy.energyCapacityLevel;
+                const newEnergyValue = Math.min(currentEnergy.value + energyRecoveryData.recovery[currentRecoveryLevel - 1], energyCapacityData.capacity[currentCapacityLevel - 1]);
                 useStore.getState().updateEnergy('value', newEnergyValue);
             }, 1000);
 
@@ -187,11 +226,19 @@ export const HomeScreen = () => {
     const sendEnergyToServer = async () => {
         try {
             if (energy) {
+                const currentEnergy = useStore.getState().energy;
+                const energyCapacityData = balance.energy.energyCapacity;
+                const energyRecoveryData = balance.energy.energyRecovery;
+                let currentRecoveryLevel = currentEnergy.energyRecoveryLevel;
+                let currentCapacityLevel = currentEnergy.energyCapacityLevel;
+
                 const timeToRestoreEnergy = 1000; // восстановления энергии в сек
-                const energyToRestore = energy.energyCapacity[energy.currentLevel - 1] - energy.value; // сколько не хватает энергии
-                const energyRestoredPerSecond = energy.energyRecovery[energy.currentLevel - 1];
+                const energyToRestore = energyCapacityData.capacity[currentCapacityLevel - 1] - currentEnergy.value; // сколько не хватает энергии
+                const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
                 const totalTimeToRestore = timeToRestoreEnergy * (energyToRestore / energyRestoredPerSecond)//делим на уровень восстановления энергии;
+
                 const currentTime = new Date();
+
                 const energyRestoreTime = new Date(currentTime.getTime() + totalTimeToRestore);
                 await updateEnergyDate({userId, energyRestoreTime, value: energy.value}).then((data) => {
                 });
@@ -216,26 +263,22 @@ export const HomeScreen = () => {
 
     return (
         <div className="App">
-
             <div className="counter-container">
                 <header className="header-main-container">
                     <div className={'headerHomeBlock'}>
                         <div className="header-container">
-                            <div className={'headerScoreBlock'}>
-                                <div className={'headerScoreText'}>
-                                    <img src={scoreCoin}></img>
+                            <div className='headerScoreBlock'>
+                                <div className='headerScoreText'>
+                                    <img src={scoreCoin} alt="scoreCoin"/>
                                     <p>{score}</p>
                                 </div>
                             </div>
-                            <p className={'lvlText'}>lvl 12</p>
+                            <p className='lvlText'>lvl {level}</p>
                             <div className="lvl-progress-container">
-                                <div className={'lvl-progress-bar'}>
-                                    <div className={'lvl-progress-line'}
-                                         style={{width: `${(energy.value * 100) / energy.energyCapacity[energy.currentLevel - 1]}%`}}
-                                    ></div>
+                                <div className='lvl-progress-bar'>
+                                    <div className='lvl-progress-line' style={{width: `${(score % 50) * 2}%`}}></div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     {showModal && <ComingSoonModal onClose={handleModalToggle}/>}
@@ -245,15 +288,18 @@ export const HomeScreen = () => {
                      onTouchEnd={handleMultiTouchEnd}
                      onTouchMove={(e) => e.preventDefault()}
                 >
-
                 </div>
                 <div className="pedestal-container">
                     <button className="pedestal-overlay"
                             onTouchStart={handleMultiTouchStart}
                             onTouchEnd={handleMultiTouchEnd}
-                            onTouchMove={(e) => e.preventDefault()}
-                    >
-                        <img src={bubbleHamster} alt="bubbleHamster"/>
+                            onTouchMove={(e) => e.preventDefault()}>
+                        <img src={bubble} alt="bubbleHamster" className="bubbleImg"/>
+                        {showVideo ? (
+                            <video src={sadHamsterVideo} autoPlay loop muted className="sadHamsterVid"/>
+                        ) : (
+                            <img src={sadHamsterImg} alt="sadHamster" className="sadHamsterImg"/>
+                        )}
                     </button>
 
                     {clickEffects}

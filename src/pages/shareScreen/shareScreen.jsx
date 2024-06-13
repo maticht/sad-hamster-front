@@ -6,8 +6,6 @@ import NavBar from "../../components/navBar/navBar";
 import {collectFromInvitees, replenishmentFromInvitees} from "../../httpRequests/dragonEggApi";
 import scoreCoin from "../../img/icons/sadCoin.png";
 import {Link} from "react-router-dom";
-import helmet from "../../img/icons/profile.png";
-import torch from "../../img/icons/torch.png";
 import ComingSoonModal from "../../components/modals/ComingSoonModal/ComingSoonModal";
 import useStore from "../../store/zustand.store/store";
 
@@ -15,7 +13,7 @@ export const ShareScreen = () => {
     let currentUrl = window.location.href;
     const [totalScore, setTotalScore] = useState(0);
     //const [userData, setUserData] = useState({});
-    const { tg, queryId, user } = useTelegram();
+    const {tg, queryId, user} = useTelegram();
     const userId = user?.id || '777217409';
     const [replenishmentHandled, setReplenishmentHandled] = useState(false);
     const [countdown, setCountdown] = useState('00:00:00');
@@ -47,11 +45,12 @@ export const ShareScreen = () => {
     const handleCollectFromInvitees = async () => {
         try {
             const response = await collectFromInvitees(userId);
-            setScore(response.user.score);
-            setOverallScore(response.user.overallScore);
-            setReferralCollectionTime(response.user.referralCollectionTime);
-            setReferralUsers(response.user.referralUsers);
-            const totalScore = user.referralUsers.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0);
+            console.log(response)
+            setScore(response.score);
+            setOverallScore(response.overallScore);
+            setReferralCollectionTime(response.referralUsers.referralCollectionTime);
+            setReferralUsers(response.referralUsers);
+            const totalScore = response.referralUsers.users.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0);
             setTotalScore(totalScore);
             setReplenishmentHandled(false);
         } catch (error) {
@@ -63,8 +62,9 @@ export const ShareScreen = () => {
             if (!replenishmentHandled && referralUsers) {
                 setReplenishmentHandled(true);
                 const response = await replenishmentFromInvitees(userId);
-                setReferralUsers(response.user.referralUsers);
-                const totalScore = user.referralUsers.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0);
+                console.log(response)
+                setReferralUsers(response.referralUsers);
+                const totalScore = response.referralUsers.users.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0);
                 setTotalScore(totalScore);
             }
         } catch (error) {
@@ -89,7 +89,7 @@ export const ShareScreen = () => {
                     setCountdown(`${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
                 } else {
                     setCountdown('00:00:00');
-                    if(totalScore === 0) {
+                    if (totalScore === 0) {
                         handleReplenishmentFromInvitees();
                     }
                     clearInterval(intervalId);
@@ -113,19 +113,20 @@ export const ShareScreen = () => {
     useEffect(() => {
         const fetchUserDataAndDisplay = async () => {
             const user = await fetchUserData();
-            if(!referralUsers){
+            console.log(user);
+            if (!referralUsers) {
                 setReferralUsers(user.referralUsers);
             }
-            if(!score){
-                setScore(user.score);
+            if (!score) {
+                setScore(user.scores.score);
             }
-            if(!overallScore){
-                setOverallScore(user.overallScore);
+            if (!overallScore) {
+                setOverallScore(user.scores.overallScore);
             }
-            if(!referralCollectionTime){
-                setReferralCollectionTime(user.referralCollectionTime);
+            if (!referralCollectionTime) {
+                setReferralCollectionTime(user.referralUsers.referralCollectionTime);
             }
-            const totalScore = user.referralUsers.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0);
+            const totalScore = user.referralUsers.users.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0);
             setTotalScore(totalScore);
         };
         if (userId) {
@@ -177,11 +178,11 @@ export const ShareScreen = () => {
                            onClick={copyLinkToClipboard}>Invite</a>
                     </div>
                     <div className={'referralUsers'}>
-                        {referralUsers?.length && (
+                        {referralUsers?.users?.length && (
                             <div className='referral-users-block'>
                                 <div className='referral-users-text'>
                                     <h2>Invited users</h2>
-                                    <p>Current number of referral users: <b>{referralUsers.length}</b></p>
+                                    <p>Current number of referral users: <b>{referralUsers.users.length}</b></p>
                                     <div className={'referral-users-replenishment'}>
                                         <div>
                                             <p>Replenishment in:</p>
@@ -190,14 +191,14 @@ export const ShareScreen = () => {
                                         <button className='referral-user-score' onClick={handleCollectFromInvitees}>
                                             <p>Collect</p>
                                             <div className='referral-user-score-num'>
-                                                <b>{!referralUsers ? '0' : referralUsers.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0)}</b>
+                                                <b>{!referralUsers ? '0' : referralUsers.users.reduce((accumulator, referralUser) => accumulator + referralUser.score, 0)}</b>
                                                 <img src={scoreCoin}></img>
                                             </div>
                                         </button>
                                     </div>
                                 </div>
                                 <div className='top-users-list'>
-                                    {referralUsers?.length && referralUsers
+                                    {referralUsers?.users.length && referralUsers.users
                                         .sort((a, b) => b.score - a.score)
                                         .map((user, index) => (
                                             <div key={user._id} className='top-user-block'>
@@ -215,60 +216,7 @@ export const ShareScreen = () => {
                                                 </div>
                                             </div>
                                         ))}
-                                    {referralUsers?.length && referralUsers
-                                        .sort((a, b) => b.score - a.score)
-                                        .map((user, index) => (
-                                            <div key={user._id} className='top-user-block'>
-                                                <div className='top-user-info after-fourth-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <div>
-                                                            <p>{user.firstName} {user.lastName}</p>
-                                                            <b>{user.username}</b>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>Score:</p>
-                                                        <b>{!user.score ? '0' : user.score}</b>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    {referralUsers?.length && referralUsers
-                                        .sort((a, b) => b.score - a.score)
-                                        .map((user, index) => (
-                                            <div key={user._id} className='top-user-block'>
-                                                <div className='top-user-info after-fourth-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <div>
-                                                            <p>{user.firstName} {user.lastName}</p>
-                                                            <b>{user.username}</b>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>Score:</p>
-                                                        <b>{!user.score ? '0' : user.score}</b>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    {referralUsers?.length && referralUsers
-                                        .sort((a, b) => b.score - a.score)
-                                        .map((user, index) => (
-                                            <div key={user._id} className='top-user-block'>
-                                                <div className='top-user-info after-fourth-user-info'>
-                                                    <div className='top-user-title'>
-                                                        <div>
-                                                            <p>{user.firstName} {user.lastName}</p>
-                                                            <b>{user.username}</b>
-                                                        </div>
-                                                    </div>
-                                                    <div className='top-user-score'>
-                                                        <p>Score:</p>
-                                                        <b>{!user.score ? '0' : user.score}</b>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
+
                                     {/*{userData.referralUsers*/}
                                     {/*    .sort((a, b) => b.score - a.score)*/}
                                     {/*    .map((user, index) => (*/}

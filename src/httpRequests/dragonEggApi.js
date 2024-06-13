@@ -1,14 +1,15 @@
 import {$host} from "./index";
 
 export const getUserData = async (userid) => {
-    const {data} = await $host.get('/api/user/' + userid)
+    const {data} = await $host.get('/api/user/fullUserData/' + userid)
     return data
 }
 
-export const getAllUsers = async () => {
-    const {data} = await $host.get('/api/user/all')
+export const getAllUsers = async (body) => {
+    const {data} = await $host.post('/api/user/all', body)
     return data
 }
+
 export const getUserTopPlace = async (userId) => {
     const {data} = await $host.put('/api/user/topPlace/' + userId);
     return data;
@@ -19,7 +20,7 @@ export const getMiniGameReward = async (userId, body) => {
 }
 
 export const updateScore = async (value) => {
-    const {data} = await $host.patch('/api/user/updateScore', value);
+    const {data} = await $host.patch('/api/score', value);
     return data;
 }
 
