@@ -22,7 +22,6 @@ import useStore from "../../store/zustand.store/store";
 const balance = require("../../storeTemplateData/balanceData.json");
 
 
-
 export const HomeScreen = () => {
     const [userData, setUserData] = useState({});
     const {user} = useTelegram();
@@ -60,7 +59,6 @@ export const HomeScreen = () => {
     const handleModalToggle = () => {
         setShowModal(!showModal);
     };
-
 
 
     const handleMultiTouchStart = (event) => {
@@ -143,44 +141,50 @@ export const HomeScreen = () => {
     useEffect(() => {
 
         const fetchUserDataAndDisplay = async () => {
-            const user = await fetchUserData();
-            setUserData(user);
+            if (!damage || !energy.energyRecoveryLevel || !score || !overallScore) {
+                const user = await fetchUserData();
+                setUserData(user);
 
-            if(!damage){
-                setDamage(user.damageLevel);
+
+                if (!damage) {
+                    setDamage(user.damageLevel);
+                }
+                if (!energy.energyRecoveryLevel) {
+                    const usersEnergyObj = user.energy.energy;
+                    const energyCapacityData = balance.energy.energyCapacity;
+                    const energyRecoveryData = balance.energy.energyRecovery;
+                    let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
+                    let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
+                    const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
+
+                    let now = new Date();
+                    const diffTime = now.getTime() - fullEnergyTime.getTime();
+
+                    console.log("diffTime", diffTime / 1000)
+
+                    let energyValue;
+                    if (diffTime >= 0) {
+                        energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
+                    } else {
+                        const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
+                        const timeSinceLastUpdate = Math.abs(diffTime);
+                        const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
+                        const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
+                        energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
+                    }
+                    usersEnergyObj.value = energyValue;
+                    setEnergy(usersEnergyObj);
+                }
+
+                if (!score) {
+                    setScore(user.scores.score);
+                }
+                if (!overallScore) {
+                    setOverallScore(user.scores.overallScore);
+                }
             }
 
-            const usersEnergyObj = user.energy.energy;
-            const energyCapacityData = balance.energy.energyCapacity;
-            const energyRecoveryData = balance.energy.energyRecovery;
-            let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
-            let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
-            const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
 
-            let now = new Date();
-            const diffTime = now.getTime() - fullEnergyTime.getTime();
-
-            console.log("diffTime", diffTime / 1000)
-
-            let energyValue;
-            if (diffTime >= 0) {
-                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
-            } else {
-                const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
-                const timeSinceLastUpdate = Math.abs(diffTime);
-                const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
-                const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
-                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
-            }
-            usersEnergyObj.value = energyValue;
-            setEnergy(usersEnergyObj);
-
-            if (!score) {
-                setScore(user.scores.score);
-            }
-            if (!overallScore) {
-                setOverallScore(user.scores.overallScore);
-            }
             setDataLoaded(true);
         };
 
@@ -203,7 +207,7 @@ export const HomeScreen = () => {
 
     //ЭНЕРГИЯ
     useEffect(() => {
-        if (energy) {
+        if (energy.energyRecoveryLevel) {
             const interval = setInterval(() => {
                 const currentEnergy = useStore.getState().energy;
                 const energyCapacityData = balance.energy.energyCapacity;

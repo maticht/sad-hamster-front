@@ -13,7 +13,7 @@ const useStore = create(devtools(set => ({
     damage: 0,
     energy: {
         energyFullRecoveryDate: new Date(),
-        value: 500,
+        value: 0,
         energyCapacityLevel: 0,
         energyRecoveryLevel: 0,
         lastEntrance: null,
