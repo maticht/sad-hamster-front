@@ -24,22 +24,6 @@ const balance = require("../../storeTemplateData/balanceData.json");
 
 
 export const HomeScreen = () => {
-    const [userData, setUserData] = useState({});
-    const {user} = useTelegram();
-    const userId = user?.id || '777217409';
-
-    const [touchStartPositions, setTouchStartPositions] = useState({});
-    const [clickEffects, setClickEffects] = useState([])
-
-    const [dataLoaded, setDataLoaded] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-    const [backgroundMusicIsPlaying, setBackgroundMusicIsPlaying] = useState();
-    const [level, setLevel] = useState(1);
-    const [showVideo, setShowVideo] = useState(false);
-    const [audio] = useState(new Audio("https://res.cloudinary.com/dfl7i5tm2/video/upload/v1718217975/LITTLE_COWBOY_-_READY_TO_GO_ORIGINAL_VERSION_mp3cut.net_nxkkxn.mp3"));
-
-    const [countdown, setCountdown] = useState(null);
-
 
     //STORE
     const setScore = useStore((state) => state.setScore);
@@ -57,11 +41,22 @@ export const HomeScreen = () => {
             damage: state.damage,
         }));
 
+    const [userData, setUserData] = useState({});
+    const {user} = useTelegram();
+    const userId = user?.id || '777217409';
+
+    const [touchStartPositions, setTouchStartPositions] = useState({});
+    const [clickEffects, setClickEffects] = useState([])
+    const [dataLoaded, setDataLoaded] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [backgroundMusicIsPlaying, setBackgroundMusicIsPlaying] = useState();
+    const [showVideo, setShowVideo] = useState(false);
+    const [audio] = useState(new Audio("https://res.cloudinary.com/dfl7i5tm2/video/upload/v1718217975/LITTLE_COWBOY_-_READY_TO_GO_ORIGINAL_VERSION_mp3cut.net_nxkkxn.mp3"));
+
+
     const handleModalToggle = () => {
         setShowModal(!showModal);
     };
-
-
 
     const handleMultiTouchStart = (event) => {
         const touches = event.touches;
@@ -73,8 +68,51 @@ export const HomeScreen = () => {
         setTouchStartPositions(positions);
     };
 
+    const getLevel = (overallScore) => {
+        console.log(overallScore)
+        const levels = balance.levels;
+        let currentLevel = 1;
+        for (let i = 0; i < levels.length; i++) {
+            if (overallScore < levels[i]) {
+                break;
+            }
+            currentLevel = i + 1;
+        }
+        return currentLevel;
+    };
+
+    const [level, setLevel] = useState(() => getLevel(overallScore));
+
+    useEffect(() => {
+        const newLevel = getLevel(overallScore);
+        if (newLevel > level && overallScore > 0) {
+            console.log(level)
+            setShowVideo(true);
+            audio.play();
+            setTimeout(() => {
+                setShowVideo(false);
+                audio.pause();
+                audio.currentTime = 0;
+            }, 8000);
+            setLevel(newLevel);
+        }
+    }, [overallScore,]);
+
+    const getProgressPercentage = (overallScore) => {
+        const levels = balance.levels;
+        if (level === levels.length) {
+            return 100;
+        }
+        const currentLevelScore = levels[level - 1];
+        const nextLevelScore = levels[level];
+        const progress = ((overallScore - currentLevelScore) / (nextLevelScore - currentLevelScore)) * 100;
+        return Math.min(Math.max(progress, 0), 100);
+    };
+
+    const progressPercentage = getProgressPercentage(overallScore);
+
     const handleMultiTouchEnd = (event) => {
-        const touches = Array.from(event.changedTouches); // Преобразуем TouchList в массив
+        const touches = Array.from(event.changedTouches);
         console.log(touches)
         const endedTouches = [];
 
@@ -98,16 +136,6 @@ export const HomeScreen = () => {
                 if (energy.value >= scoreToAdd) {
                     handleDecreaseEnergy(scoreToAdd);
                     const newScore = score + axeScoreToAdd;
-                    if (newScore % 50 === 0) {
-                        setLevel(prevLevel => prevLevel + 1);
-                        setShowVideo(true);
-                        audio.play();
-                        setTimeout(() => {
-                            setShowVideo(false);
-                            audio.pause();
-                            audio.currentTime = 0;
-                        }, 8000);
-                    }
                     setScore(newScore);
                     setOverallScore(overallScore + scoreToAdd)
                 } else {
@@ -276,7 +304,7 @@ export const HomeScreen = () => {
                             <p className='lvlText'>lvl {level}</p>
                             <div className="lvl-progress-container">
                                 <div className='lvl-progress-bar'>
-                                    <div className='lvl-progress-line' style={{width: `${(score % 50) * 2}%`}}></div>
+                                    <div className='lvl-progress-line' style={{width: `${progressPercentage}%`}}></div>
                                 </div>
                             </div>
                         </div>
@@ -295,7 +323,7 @@ export const HomeScreen = () => {
                             onTouchEnd={handleMultiTouchEnd}
                             onTouchMove={(e) => e.preventDefault()}>
                         <img src={bubble} alt="bubbleHamster" className="bubbleImg"/>
-                        {showVideo ? (
+                        {showVideo && overallScore > 0 ? (
                             <video src={sadHamsterVideo} autoPlay loop muted className="sadHamsterVid"/>
                         ) : (
                             <img src={sadHamsterImg} alt="sadHamster" className="sadHamsterImg"/>

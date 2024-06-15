@@ -15,7 +15,7 @@ export const getUserTopPlace = async (userId) => {
     return data;
 }
 export const getMiniGameReward = async (userId, body) => {
-    const {data} = await $host.post('/api/user/miniGame/' + userId, body);
+    const {data} = await $host.post('/api/score/miniGame/' + userId, body);
     return data;
 }
 
