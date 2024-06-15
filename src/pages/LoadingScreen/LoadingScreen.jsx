@@ -3,7 +3,7 @@ import './LoadingScreen.css';
 import loadingHamster from "../../img/icons/loadingHamster.png"
 import tapScreenHamster from "../../img/icons/tapScreenHamster.png"
 import {useTelegram} from "../../hooks/useTelegram";
-import {getUserData} from "../../httpRequests/dragonEggApi";
+import {getTasks, getUserData} from "../../httpRequests/dragonEggApi";
 import {useNavigate} from 'react-router-dom';
 import useStore from "../../store/zustand.store/store";
 
@@ -28,6 +28,7 @@ export const LoadingScreen = () => {
     const setEnergy = useStore((state) => state.setEnergy);
     const setReferralUsers = useStore((state) => state.setReferralUsers);
     const setReferralCollectionTime = useStore((state) => state.setReferralCollectionTime);
+    const setTasks = useStore((state) => state.setTasks);
 
     const fetchUserData = async () => {
         const response = await getUserData(userId);
@@ -76,6 +77,8 @@ export const LoadingScreen = () => {
             }
             usersEnergyObj.value = energyValue;
             setEnergy(usersEnergyObj);
+            const tasks = await getTasks(userId);
+            setTasks(tasks.tasks);
         }
 
         if (userId) {

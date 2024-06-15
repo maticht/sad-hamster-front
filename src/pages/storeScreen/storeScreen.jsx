@@ -43,38 +43,44 @@ export const StoreScreen = () => {
 
     useEffect(() => {
         const fetchUserDataAndDisplay = async () => {
-            const user = await fetchUserData();
-            if (!score) {
-                setScore(user.scores.score);
+            if(!score || !damage || !energy){
+                const user = await fetchUserData();
+
+                if (!score) {
+                    setScore(user.scores.score);
+                }
+                if (!damage) {
+                    setDamage(user.damageLevel);
+                }
+                if(!energy){
+                    const usersEnergyObj = user.energy.energy;
+                    const energyCapacityData = balance.energy.energyCapacity;
+                    const energyRecoveryData = balance.energy.energyRecovery;
+                    let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
+                    let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
+                    const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
+
+                    let now = new Date();
+                    const diffTime = now.getTime() - fullEnergyTime.getTime();
+
+                    console.log("diffTime", diffTime / 1000)
+
+                    let energyValue;
+                    if (diffTime >= 0) {
+                        energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
+                    } else {
+                        const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
+                        const timeSinceLastUpdate = Math.abs(diffTime);
+                        const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
+                        const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
+                        energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
+                    }
+                    usersEnergyObj.value = energyValue;
+                    setEnergy(usersEnergyObj);
+                }
+
             }
-            if (!damage) {
-                setDamage(user.damageLevel);
-            }
 
-            const usersEnergyObj = user.energy.energy;
-            const energyCapacityData = balance.energy.energyCapacity;
-            const energyRecoveryData = balance.energy.energyRecovery;
-            let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
-            let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
-            const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
-
-            let now = new Date();
-            const diffTime = now.getTime() - fullEnergyTime.getTime();
-
-            console.log("diffTime", diffTime / 1000)
-
-            let energyValue;
-            if (diffTime >= 0) {
-                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
-            } else {
-                const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
-                const timeSinceLastUpdate = Math.abs(diffTime);
-                const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
-                const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
-                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
-            }
-            usersEnergyObj.value = energyValue;
-            setEnergy(usersEnergyObj);
         };
         console.log(user)
 

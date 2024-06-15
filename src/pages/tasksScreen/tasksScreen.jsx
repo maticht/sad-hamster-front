@@ -13,29 +13,36 @@ export const TasksScreen = () => {
     const {user} = useTelegram();
     const userId = user?.id || '777217409'; //'409840876' ;
     const [showModal, setShowModal] = useState(false);
-    const [tasks, setTasks] = useState([]);
 
     //STORE
     const setScore = useStore((state) => state.setScore);
     const setOverallScore = useStore((state) => state.setOverallScore);
+    const setTasks = useStore((state) => state.setTasks);
 
-    const {score,} =
+    const {score, overallScore, tasks} =
         useStore((state) => ({
             score: state.score,
-            overallScore: state.overallScore
+            overallScore: state.overallScore,
+            tasks: state.tasks,
         }));
 
 
     useEffect(() => {
         const fetchUserDataAndDisplay = async () => {
-            const user = await fetchUserData();
-            const tasks = await getTasks(userId);
-            setTasks(tasks.tasks);
-            console.log(tasks)
-            if (!score) {
-                setScore(user.scores.score);
+            if(!score || ! overallScore){
+                const user = await fetchUserData();
+                if (!score) {
+                    setScore(user.scores.score);
+                }
+                if(!setOverallScore){
+                    setOverallScore(user.scores.overallScore);
+                }
             }
-
+            if(!tasks.length){
+                const tasks = await getTasks(userId);
+                setTasks(tasks.tasks);
+                console.log(tasks)
+            }
         };
         console.log(user)
 
@@ -56,12 +63,10 @@ export const TasksScreen = () => {
     const handleCompleteTask = async (taskId) => {
         try {
             const response = await completeTask(userId, {taskId});
-
-            setTasks(prevTasks =>
-                prevTasks.map(task =>
-                    task._id === response.completedTaskId ? { ...task, done: true } : task
-                )
-            );
+            const newTasks = tasks.map(task =>
+                task._id === response.completedTaskId ? { ...task, done: true } : task
+            )
+            setTasks(newTasks);
             setScore(response.score);
             setOverallScore(response.overallScore);
 

@@ -112,6 +112,9 @@ export const ShareScreen = () => {
 
     useEffect(() => {
         const fetchUserDataAndDisplay = async () => {
+            if(!referralUsers || !score || !overallScore || !referralCollectionTime){
+
+            }
             const user = await fetchUserData();
             console.log(user);
             if (!referralUsers) {
