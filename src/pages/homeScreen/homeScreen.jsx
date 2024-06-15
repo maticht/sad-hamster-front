@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import './mainScreen.css';
 import {useTelegram} from "../../hooks/useTelegram";
 import {
@@ -22,6 +22,7 @@ import useStore from "../../store/zustand.store/store";
 const balance = require("../../storeTemplateData/balanceData.json");
 
 
+
 export const HomeScreen = () => {
     const [userData, setUserData] = useState({});
     const {user} = useTelegram();
@@ -33,12 +34,9 @@ export const HomeScreen = () => {
     const [dataLoaded, setDataLoaded] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [backgroundMusicIsPlaying, setBackgroundMusicIsPlaying] = useState();
-    const [level, setLevel] = useState(1);
+    const [countdown, setCountdown] = useState(null);
     const [showVideo, setShowVideo] = useState(false);
     const [audio] = useState(new Audio("https://res.cloudinary.com/dfl7i5tm2/video/upload/v1718217975/LITTLE_COWBOY_-_READY_TO_GO_ORIGINAL_VERSION_mp3cut.net_nxkkxn.mp3"));
-
-    const [countdown, setCountdown] = useState(null);
-
 
     //STORE
     const setScore = useStore((state) => state.setScore);
@@ -56,9 +54,59 @@ export const HomeScreen = () => {
             damage: state.damage,
         }));
 
+    const getLevel = (overallScore) => {
+        const levels = balance.levels;
+        let currentLevel = 1;
+        for (let i = 0; i < levels.length; i++) {
+            if (overallScore < levels[i]) {
+                break;
+            }
+            currentLevel = i + 1;
+        }
+        return currentLevel;
+    };
+
+    const [level, setLevel] = useState(() => getLevel(overallScore));
+    const prevLevelRef = useRef(level);
+
+
+    useEffect(() => {
+        if (overallScore === undefined) return;
+
+        const newLevel = getLevel(overallScore);
+        const prevLevel = prevLevelRef.current;
+
+        if (newLevel > level) {
+            console.log(newLevel + " > " + prevLevel);
+            setShowVideo(true);
+            audio.play();
+            setTimeout(() => {
+                setShowVideo(false);
+                audio.pause();
+                audio.currentTime = 0;
+            }, 7800);
+            setLevel(newLevel);
+        }
+        prevLevelRef.current = newLevel;
+    }, [overallScore, audio, balance.levels]);
+
+    const getProgressPercentage = (overallScore) => {
+        const levels = balance.levels;
+        if (level === levels.length) {
+            return 100;
+        }
+        const currentLevelScore = levels[level - 1];
+        const nextLevelScore = levels[level];
+        const progress = ((overallScore - currentLevelScore) / (nextLevelScore - currentLevelScore)) * 100;
+        return Math.min(Math.max(progress, 0), 100);
+    };
+
+    const progressPercentage = getProgressPercentage(overallScore);
+
     const handleModalToggle = () => {
         setShowModal(!showModal);
     };
+
 
 
     const handleMultiTouchStart = (event) => {
@@ -96,16 +144,6 @@ export const HomeScreen = () => {
                 if (energy.value >= scoreToAdd) {
                     handleDecreaseEnergy(scoreToAdd);
                     const newScore = score + axeScoreToAdd;
-                    if (newScore % 50 === 0) {
-                        setLevel(prevLevel => prevLevel + 1);
-                        setShowVideo(true);
-                        audio.play();
-                        setTimeout(() => {
-                            setShowVideo(false);
-                            audio.pause();
-                            audio.currentTime = 0;
-                        }, 8000);
-                    }
                     setScore(newScore);
                     setOverallScore(overallScore + scoreToAdd)
                 } else {
@@ -141,50 +179,44 @@ export const HomeScreen = () => {
     useEffect(() => {
 
         const fetchUserDataAndDisplay = async () => {
-            if (!damage || !energy.energyRecoveryLevel || !score || !overallScore) {
-                const user = await fetchUserData();
-                setUserData(user);
+            const user = await fetchUserData();
+            setUserData(user);
 
-
-                if (!damage) {
-                    setDamage(user.damageLevel);
-                }
-                if (!energy.energyRecoveryLevel) {
-                    const usersEnergyObj = user.energy.energy;
-                    const energyCapacityData = balance.energy.energyCapacity;
-                    const energyRecoveryData = balance.energy.energyRecovery;
-                    let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
-                    let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
-                    const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
-
-                    let now = new Date();
-                    const diffTime = now.getTime() - fullEnergyTime.getTime();
-
-                    console.log("diffTime", diffTime / 1000)
-
-                    let energyValue;
-                    if (diffTime >= 0) {
-                        energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
-                    } else {
-                        const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
-                        const timeSinceLastUpdate = Math.abs(diffTime);
-                        const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
-                        const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
-                        energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
-                    }
-                    usersEnergyObj.value = energyValue;
-                    setEnergy(usersEnergyObj);
-                }
-
-                if (!score) {
-                    setScore(user.scores.score);
-                }
-                if (!overallScore) {
-                    setOverallScore(user.scores.overallScore);
-                }
+            if(!damage){
+                setDamage(user.damageLevel);
             }
 
+            const usersEnergyObj = user.energy.energy;
+            const energyCapacityData = balance.energy.energyCapacity;
+            const energyRecoveryData = balance.energy.energyRecovery;
+            let currentCapacityLevel = usersEnergyObj.energyCapacityLevel;
+            let currentRecoveryLevel = usersEnergyObj.energyRecoveryLevel;
+            const fullEnergyTime = new Date(usersEnergyObj.energyFullRecoveryDate);
 
+            let now = new Date();
+            const diffTime = now.getTime() - fullEnergyTime.getTime();
+
+            console.log("diffTime", diffTime / 1000)
+
+            let energyValue;
+            if (diffTime >= 0) {
+                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1];
+            } else {
+                const energyRestoredPerSecond = energyRecoveryData.recovery[currentRecoveryLevel - 1];
+                const timeSinceLastUpdate = Math.abs(diffTime);
+                const secondsSinceLastUpdate = Math.floor(timeSinceLastUpdate / 1000); // количество секунд с последнего обновления
+                const energyNotRestored = secondsSinceLastUpdate * energyRestoredPerSecond; // всего восстановленной энергии
+                energyValue = energyCapacityData.capacity[currentCapacityLevel - 1] - energyNotRestored;
+            }
+            usersEnergyObj.value = energyValue;
+            setEnergy(usersEnergyObj);
+
+            if (!score) {
+                setScore(user.scores.score);
+            }
+            if (!overallScore) {
+                setOverallScore(user.scores.overallScore);
+            }
             setDataLoaded(true);
         };
 
@@ -207,7 +239,7 @@ export const HomeScreen = () => {
 
     //ЭНЕРГИЯ
     useEffect(() => {
-        if (energy.energyRecoveryLevel) {
+        if (energy) {
             const interval = setInterval(() => {
                 const currentEnergy = useStore.getState().energy;
                 const energyCapacityData = balance.energy.energyCapacity;
@@ -280,7 +312,7 @@ export const HomeScreen = () => {
                             <p className='lvlText'>lvl {level}</p>
                             <div className="lvl-progress-container">
                                 <div className='lvl-progress-bar'>
-                                    <div className='lvl-progress-line' style={{width: `${(score % 50) * 2}%`}}></div>
+                                    <div className='lvl-progress-line' style={{width: `${progressPercentage}%`}}></div>
                                 </div>
                             </div>
                         </div>
